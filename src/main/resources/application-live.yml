@@ -1,0 +1,14 @@
+server:
+  port: ${application.port}
+
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:postgresql://${database.host}:${database.port}/${database.name}
+    username: ${database.username}
+    password: ${database.password}
+    driverClassName: org.postgresql.Driver
