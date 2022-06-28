@@ -1,6 +1,3 @@
-server:
-  port: ${application.port}
-
 spring:
   jpa:
     database: POSTGRESQL
