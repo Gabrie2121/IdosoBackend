@@ -34,7 +34,7 @@ public class ControllerExceptionHandler {
         return ResponseError
                 .newBuilder()
                 .errorCode("400")
-                .message(exception.getMessage())
+                .message(exception.getMessage().concat(" User not found"))
                 .build();
     }
 }

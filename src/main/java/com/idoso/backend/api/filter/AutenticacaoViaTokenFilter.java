@@ -53,13 +53,13 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
         val calledUri = request.getRequestURI();
         boolean isNotAuthenticationCall = !calledUri.equals(AUTH_URI);
 
-        if (isNotAuthenticationCall && !calledUri.equals("/h2-console/")) {
+        if(calledUri.startsWith("/h2-console/")) return;
+
+        if (isNotAuthenticationCall) {
             val token = recuperarToken(request);
             boolean isValido = tokenServiceImpl.isTokenValido(token, response);
 
-            if (isValido) {
-                autentica(token);
-            }
+            if (isValido) authenticate(token);
         }
     }
 
@@ -82,7 +82,7 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
         response.getWriter().write(new ObjectMapper().writeValueAsString(responseError));
     }
 
-    private void autentica(String token) {
+    private void authenticate(String token) {
         val idUsuario = tokenServiceImpl.getIdUsuario(token);
         val usuario = usuarioRepository.findByUsername(idUsuario).get();
 
