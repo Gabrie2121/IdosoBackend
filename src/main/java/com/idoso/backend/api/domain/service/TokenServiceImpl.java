@@ -41,7 +41,7 @@ public final class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public boolean isTokenValido(String token, HttpServletResponse response) throws IOException, InvalidTokenException {
+    public boolean validateToken(String token, HttpServletResponse response) throws IOException, InvalidTokenException {
         try {
             Jwts.parser().setSigningKey(jwtProperties.getAppSecret()).parseClaimsJws(token);
             return true;

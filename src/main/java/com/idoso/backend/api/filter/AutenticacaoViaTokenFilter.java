@@ -23,7 +23,6 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
     private final TokenServiceImpl tokenServiceImpl;
     private final UsuarioRepository usuarioRepository;
 
-
     public AutenticacaoViaTokenFilter(TokenServiceImpl tokenServiceImpl, UsuarioRepository usuarioRepository) {
         this.tokenServiceImpl = tokenServiceImpl;
         this.usuarioRepository = usuarioRepository;
@@ -46,27 +45,26 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
         }
     }
 
-    private void validateToken(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) throws IOException, InvalidTokenException {
+    private void validateToken(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, InvalidTokenException {
+
         val calledUri = request.getRequestURI();
         boolean isNotAuthenticationCall = !calledUri.equals(AUTH_URI);
 
-        if(calledUri.startsWith("/h2-console/")) return;
+        if (calledUri.startsWith("/h2-console/")) return;
 
         if (isNotAuthenticationCall) {
-            val token = recuperarToken(request);
-            boolean isValido = tokenServiceImpl.isTokenValido(token, response);
+            val token = getTokenFromHeader(request);
+            boolean isValid = tokenServiceImpl.validateToken(token, response);
 
-            if (isValido) authenticate(token);
+            if (isValid) authenticate(token);
         }
     }
 
-    private String recuperarToken(HttpServletRequest req) {
+    private String getTokenFromHeader(HttpServletRequest req) {
         val token = req.getHeader("Authorization");
         if (token == null || token.isEmpty() || !token.startsWith("Bearer")) {
-            log.info("Token nulo");
+            log.info("Token is null");
             return null;
         }
         return token.substring(7, token.length());

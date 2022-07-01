@@ -21,10 +21,10 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseError handleBadCredentialsException(AuthenticationException exception) {
         return ResponseError
-                .newBuilder()
-                .errorCode("400")
-                .message(exception.getMessage())
-                .build();
+            .newBuilder()
+            .errorCode("400")
+            .message(exception.getMessage())
+            .build();
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
@@ -32,9 +32,9 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseError handleUserNotFoundException(UsernameNotFoundException exception) {
         return ResponseError
-                .newBuilder()
-                .errorCode("400")
-                .message(exception.getMessage().concat(" User not found"))
-                .build();
+            .newBuilder()
+            .errorCode("400")
+            .message(exception.getMessage().concat(" User not found"))
+            .build();
     }
 }

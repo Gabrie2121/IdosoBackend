@@ -26,7 +26,6 @@ public final class ResponseError {
 
         private Builder() {}
 
-
         public Builder errorCode(String errorCode) {
             this.errorCode = errorCode;
             return this;

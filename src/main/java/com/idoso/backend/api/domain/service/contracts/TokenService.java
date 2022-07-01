@@ -9,7 +9,7 @@ public interface TokenService {
 
     String generateTokenJWT(Authentication authentication);
 
-    boolean isTokenValido(String token, HttpServletResponse response) throws InvalidTokenException, IOException;
+    boolean validateToken(String token, HttpServletResponse response) throws InvalidTokenException, IOException;
 
     String getIdUsuario(String token);
 }
