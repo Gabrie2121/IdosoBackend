@@ -39,16 +39,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-            .antMatchers(GET, "/auth").permitAll()
+            .antMatchers(POST, "/auth").permitAll()
             .antMatchers("/h2-console/", "/h2-console/**").permitAll()
             .antMatchers(GET, "/users").hasRole("ADMIN")
-                .anyRequest().authenticated()
-                    .and()
+            .anyRequest().authenticated()
+            .and()
             .csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
+            .and()
             .addFilterBefore(new AutenticacaoViaTokenFilter(tokenServiceImpl, usuarioRepository), UsernamePasswordAuthenticationFilter.class);
 
-        http.headers().frameOptions().disable();
+        http.headers().frameOptions().sameOrigin();
     }
 
     @Override
