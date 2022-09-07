@@ -39,6 +39,9 @@ public final class AnuncioEntity {
 
     private Boolean ativo;
 
+    @OneToOne(mappedBy = "anuncio")
+    private TrabalhoEntity trabalho;
+
     @PrePersist
     public void setAtivo() {
         if (isNull(ativo)) {
@@ -139,6 +142,7 @@ public final class AnuncioEntity {
         private BigDecimal pagamentBase;
         private Boolean moraJunto;
         private Boolean ativo;
+        private TrabalhoEntity trabalho;
         private List<LaudoEntity> laudos = new ArrayList<>();
 
         private Builder() {
@@ -181,6 +185,11 @@ public final class AnuncioEntity {
 
         public Builder ativo(Boolean ativo) {
             this.ativo = ativo;
+            return this;
+        }
+
+        public Builder trabalho(TrabalhoEntity trabalho) {
+            this.trabalho = trabalho;
             return this;
         }
 
