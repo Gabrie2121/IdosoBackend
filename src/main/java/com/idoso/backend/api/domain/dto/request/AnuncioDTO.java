@@ -1,61 +1,46 @@
-package com.idoso.backend.api.domain.entities;
-
-import static java.util.Objects.isNull;
-import static javax.persistence.EnumType.STRING;
-import static javax.persistence.GenerationType.IDENTITY;
+package com.idoso.backend.api.domain.dto.request;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import javax.persistence.*;
+
+import com.idoso.backend.api.domain.entities.AnuncioEntity;
+import com.idoso.backend.api.domain.entities.IdosoEntity;
+import com.idoso.backend.api.domain.entities.LaudoEntity;
+import com.idoso.backend.api.domain.entities.UsuarioEntity;
 import com.idoso.backend.api.domain.enuns.FrequenciaEnum;
 import com.idoso.backend.api.domain.enuns.PeriodoEnum;
 
-@Entity
-@Table(name = "anuncio")
-public final class AnuncioEntity {
+public class AnuncioDTO {
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
     private Long id;
-
-    @ManyToOne
     private IdosoEntity idoso;
-
-    @ManyToOne
     private UsuarioEntity usuario;
-
-    @Enumerated(STRING)
     private PeriodoEnum periodo;
-
-    @Enumerated(STRING)
     private FrequenciaEnum frequencia;
-
     private BigDecimal pagamentBase;
-
-
     private Boolean moraJunto;
-
     private Boolean ativo;
-
-    @OneToOne(mappedBy = "anuncio")
-    private TrabalhoEntity trabalho;
-
-    @PrePersist
-    public void setAtivo() {
-        if (isNull(ativo)) {
-            ativo = true;
-        }
-    }
-
-    @OneToMany
     private List<LaudoEntity> laudos = new ArrayList<>();
 
-    public AnuncioEntity() {
+    public AnuncioDTO() {
+        super();
     }
 
-    public AnuncioEntity(Builder builder) {
+    public AnuncioDTO(AnuncioEntity obj) {
+        super();
+        this.id = obj.getId();
+        this.idoso = obj.getIdoso();
+        this.usuario = obj.getUsuario();
+        this.periodo = obj.getPeriodo();
+        this.frequencia = obj.getFrequencia();
+        this.pagamentBase = obj.getPagamentBase();
+        this.moraJunto = obj.getMoraJunto();
+        this.ativo = obj.getAtivo();
+        this.laudos = obj.getLaudos();
+    }
+
+    public AnuncioDTO(Builder builder) {
         this.id = builder.id;
         this.idoso = builder.idoso;
         this.usuario = builder.usuario;
@@ -103,32 +88,6 @@ public final class AnuncioEntity {
         return laudos;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AnuncioEntity that = (AnuncioEntity) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(idoso, that.idoso) &&
-                Objects.equals(usuario, that.usuario) &&
-                periodo == that.periodo &&
-                frequencia == that.frequencia &&
-                Objects.equals(pagamentBase, that.pagamentBase) &&
-                Objects.equals(moraJunto, that.moraJunto) &&
-                Objects.equals(ativo, that.ativo) &&
-                Objects.equals(laudos, that.laudos);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, idoso, usuario, periodo, frequencia, pagamentBase, moraJunto, ativo, laudos);
-    }
-
-    @Override
-    public String toString() {
-        return "AnuncioEntity{id=" + id + '}';
-    }
-
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -142,7 +101,6 @@ public final class AnuncioEntity {
         private BigDecimal pagamentBase;
         private Boolean moraJunto;
         private Boolean ativo;
-        private TrabalhoEntity trabalho;
         private List<LaudoEntity> laudos = new ArrayList<>();
 
         private Builder() {
@@ -188,18 +146,14 @@ public final class AnuncioEntity {
             return this;
         }
 
-        public Builder trabalho(TrabalhoEntity trabalho) {
-            this.trabalho = trabalho;
-            return this;
-        }
-
         public Builder laudos(List<LaudoEntity> laudos) {
             this.laudos = laudos;
             return this;
         }
 
-        public AnuncioEntity build() {
-            return new AnuncioEntity(this);
+        public AnuncioDTO build() {
+            return new AnuncioDTO(this);
         }
     }
+
 }

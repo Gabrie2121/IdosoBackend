@@ -2,6 +2,7 @@ package com.idoso.backend.api.handlers;
 
 import com.idoso.backend.api.domain.dto.response.ResponseError;
 import com.idoso.backend.api.domain.exception.InvalidTokenException;
+import com.idoso.backend.api.domain.exception.ObjectNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -37,4 +38,16 @@ public class ControllerExceptionHandler {
             .message(exception.getMessage().concat(" User not found"))
             .build();
     }
+
+    @ExceptionHandler(ObjectNotFoundException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseError handleObjectNotFoundException(ObjectNotFoundException exception) {
+        return ResponseError
+                .newBuilder()
+                .errorCode("400")
+                .message(exception.getMessage().concat(" Object not found"))
+                .build();
+    }
+
 }

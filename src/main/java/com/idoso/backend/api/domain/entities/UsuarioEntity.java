@@ -8,6 +8,7 @@ import java.util.*;
 import javax.persistence.*;
 import com.idoso.backend.api.domain.enuns.FormaPagamentoEnum;
 import com.idoso.backend.api.domain.enuns.TipoPessoaEnum;
+import com.idoso.backend.api.domain.enuns.TipoUsuarioEnum;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -77,6 +78,15 @@ public final class UsuarioEntity implements UserDetails {
     }
 
     private String email;
+
+    @Enumerated(STRING)
+    private TipoUsuarioEnum tipoUsuario;
+
+    @OneToOne(mappedBy = "prestador")
+    private TrabalhoEntity trabalhoPrestador;
+
+    @OneToOne(mappedBy = "idoso")
+    private TrabalhoEntity trabalhoIdoso;
 
     @OneToMany
     private List<AnuncioEntity> anuncios = new ArrayList<>();
@@ -257,6 +267,9 @@ public final class UsuarioEntity implements UserDetails {
         private FormaPagamentoEnum formaPagamento;
         private Date dataCadastro;
         private String email;
+        private TipoUsuarioEnum tipoUsuario;
+        private TrabalhoEntity trabalhoPrestador;
+        private TrabalhoEntity trabalhoIdoso;
         private List<AnuncioEntity> anuncios = new ArrayList<>();
 
         private Builder() {}
@@ -348,6 +361,21 @@ public final class UsuarioEntity implements UserDetails {
 
         public Builder dataCadastro(Date dataCadastro) {
             this.dataCadastro = dataCadastro;
+            return this;
+        }
+
+        public Builder tipoUsuario(TipoUsuarioEnum tipoUsuario) {
+            this.tipoUsuario = tipoUsuario;
+            return this;
+        }
+
+        public Builder trabalhoPrestador(TrabalhoEntity trabalhoPrestador) {
+            this.trabalhoPrestador = trabalhoPrestador;
+            return this;
+        }
+
+        public Builder trabalhoIdoso(TrabalhoEntity trabalhoIdoso) {
+            this.trabalhoIdoso = trabalhoIdoso;
             return this;
         }
 
