@@ -94,6 +94,8 @@ public class Massa {
                 .profileEntities(profileEntities)
                 .username("d.alves@teste.com")
                 .password(new BCryptPasswordEncoder().encode("abcdef"))
+                .nome("Denilson")
+                .sobrenome("Oliveira")
                 .apelido("Nil")
                 .dataNasc(new GregorianCalendar(1987, APRIL, 4).getTime())
                 .nDoc("010203040506")

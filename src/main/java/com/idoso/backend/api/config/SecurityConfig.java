@@ -45,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(GET, "/users").hasRole("ADMIN")
             .antMatchers("/idoso/**").hasRole("IDOSO")
             .antMatchers("/prestador/**").hasRole("PRESTADOR")
+            .antMatchers(POST, "/usuario").permitAll()
             .anyRequest().authenticated()
             .and()
             .csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
