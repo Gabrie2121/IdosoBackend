@@ -29,6 +29,13 @@ public final class UsuarioEntity implements UserDetails {
     @Column
     private String password;
 
+    @Column
+    private String nome;
+
+    @Column
+    private String sobrenome;
+
+
     @Column(length = 50)
     private String razaoSocial;
 
@@ -98,6 +105,8 @@ public final class UsuarioEntity implements UserDetails {
         this.profileEntities = builder.profileEntities;
         this.username = builder.username;
         this.password = builder.password;
+        this.nome = builder.nome;
+        this.sobrenome = builder.sobrenome;
         this.razaoSocial = builder.razaoSocial;
         this.nomeFantasia = builder.nomeFantasia;
         this.apelido = builder.apelido;
@@ -139,6 +148,13 @@ public final class UsuarioEntity implements UserDetails {
         return profileEntities;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public String getSobrenome() {
+        return sobrenome;
+    }
     public String getRazaoSocial() {
         return razaoSocial;
     }
@@ -213,7 +229,7 @@ public final class UsuarioEntity implements UserDetails {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, profileEntities, username, password, razaoSocial, nomeFantasia, apelido, dataNasc, nDoc, ie, genero, celular, foneUm, foneDois, enderecos, tipoPessoa, formaPagamento, dataCadastro, email, anuncios);
+        return Objects.hash(id, profileEntities, username, password, nome, sobrenome, razaoSocial, nomeFantasia, apelido, dataNasc, nDoc, ie, genero, celular, foneUm, foneDois, enderecos, tipoPessoa, formaPagamento, dataCadastro, email, anuncios);
     }
 
     @Override
@@ -252,6 +268,8 @@ public final class UsuarioEntity implements UserDetails {
         private List<ProfileEntity> profileEntities = new ArrayList<>();
         private String username;
         private String password;
+        private String nome;
+        private String sobrenome;
         private String razaoSocial;
         private String nomeFantasia;
         private String apelido;
@@ -291,6 +309,16 @@ public final class UsuarioEntity implements UserDetails {
 
         public Builder password(String password) {
             this.password = password;
+            return this;
+        }
+
+        public Builder nome(String nome) {
+            this.nome = nome;
+            return this;
+        }
+
+        public Builder sobrenome(String sobrenome) {
+            this.sobrenome = sobrenome;
             return this;
         }
 
