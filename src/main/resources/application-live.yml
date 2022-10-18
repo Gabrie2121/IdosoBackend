@@ -3,9 +3,9 @@ spring:
     database: POSTGRESQL
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   datasource:
-    url: jdbc:postgresql://${database.host}:${database.port}/${database.name}
-    username: ${database.username}
-    password: ${database.password}
+    url: jdbc:postgresql://${database.host:82.180.160.174}:${database.port:5432}/${database.name:idosoprod}
+    username: ${database.username:idoso}
+    password: ${database.password:root}
     driverClassName: org.postgresql.Driver
