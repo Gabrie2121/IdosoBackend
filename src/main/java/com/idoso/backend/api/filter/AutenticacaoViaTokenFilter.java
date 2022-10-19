@@ -52,7 +52,7 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
         boolean isNotAuthenticationCall = !calledUri.equals(AUTH_URI);
 
         if (calledUri.startsWith("/h2-console/")) return;
-        else if(calledUri.startsWith("/usuario/open")) return;
+        else if(calledUri.startsWith("/open/")) return;
 
         if (isNotAuthenticationCall) {
             val token = getTokenFromHeader(request);

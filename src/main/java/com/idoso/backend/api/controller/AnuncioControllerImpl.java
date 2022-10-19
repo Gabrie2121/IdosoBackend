@@ -3,6 +3,8 @@ package com.idoso.backend.api.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.idoso.backend.api.domain.entities.AnuncioEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +19,9 @@ import com.idoso.backend.api.domain.service.contracts.AnuncioService;
 
 @RestController
 @RequestMapping(value = "/cuidador/anuncios")
+@RequiredArgsConstructor
 public class AnuncioControllerImpl implements AnuncioController {
-
-    @Autowired
-    private AnuncioService service;
+    private final AnuncioService service;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<AnuncioDTO> findById(@PathVariable Long id) throws ObjectNotFoundException {
@@ -31,12 +32,13 @@ public class AnuncioControllerImpl implements AnuncioController {
 
     @GetMapping()
     public ResponseEntity<List<AnuncioDTO>> findAll() {
-
         List<AnuncioDTO> listDTO = service.findAll().stream().map(obj -> new AnuncioDTO(obj))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(listDTO);
-
     }
+
+
+
 
 }

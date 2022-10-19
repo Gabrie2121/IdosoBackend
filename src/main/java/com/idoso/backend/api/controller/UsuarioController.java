@@ -1,59 +1,76 @@
 package com.idoso.backend.api.controller;
 
+import com.idoso.backend.api.domain.entities.UsuarioEntity;
+import com.idoso.backend.api.domain.repository.UsuarioRepository;
+import com.idoso.backend.api.service.ImageService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-
-import com.idoso.backend.api.domain.entities.UsuarioEntity;
-import com.idoso.backend.api.domain.repository.UsuarioRepository;
-
 @RestController
-@RequestMapping("/usuario/open")
+@RequestMapping("/usuario")
+@RequiredArgsConstructor
 @CrossOrigin
 public class UsuarioController {
 
-	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private final UsuarioRepository usuarioRepository;
 
-	@Autowired
-	PasswordEncoder encoder;
-	
+	private final ImageService imageService;
 
 	@GetMapping("/all")
 	public List<UsuarioEntity> getAll(){
 		return usuarioRepository.findAll();
 	}
-	
-	@PostMapping("/post")
-	public UsuarioEntity post(@Validated @RequestBody UsuarioEntity usuario) {
-		usuario.setPassword(encoder.encode(usuario.getPassword()));
-		return usuarioRepository.save(usuario);
-	}
-	
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<UsuarioEntity> delete(@PathVariable(value="id") long id){
 		Optional<UsuarioEntity> cadastroPF = usuarioRepository.findById(id);
 		if(cadastroPF.isPresent()) {
 			usuarioRepository.delete(cadastroPF.get());
-			return new ResponseEntity<UsuarioEntity>(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}else {
-			return new ResponseEntity<UsuarioEntity>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
 	}
+
+
+//	@GetMapping(path = "/images/profile/{idUsuario}", produces = MediaType.IMAGE_PNG_VALUE)
+//	@ResponseBody
+//	public byte[] getBytes(@PathVariable("idUsuario") String idUsuario) {
+//		return imageService.getBytes(Long.parseLong(idUsuario));
+//	}
+
+	@GetMapping("/getById/{idUsuario}")
+	public ResponseEntity<UsuarioEntity> getById (@PathVariable("idUsuario") String idUsuario) {
+		UsuarioEntity usuario = usuarioRepository.findById(Long.parseLong(idUsuario))
+				.orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado id "+ idUsuario ));
+
+		return ResponseEntity.ok(usuario);
+	}
+
+	@PatchMapping("/atualizaBiografia")
+	public String atualizarBioagrafia(@RequestBody UsuarioEntity usuario) {
+		Long id = usuario.getId();
+
+		UsuarioEntity bdUsuario = usuarioRepository.findById(id)
+				.orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado id "+ id));
+
+		bdUsuario.setBiografia(usuario.getBiografia());
+
+		usuarioRepository.save(bdUsuario);
+
+		return "Biografia modificada com sucesso";
+
+	}
+
+
 }
 

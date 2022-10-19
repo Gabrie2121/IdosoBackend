@@ -28,10 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final TokenServiceImpl tokenServiceImpl;
     private final UsuarioRepository usuarioRepository;
 
-    public SecurityConfig(
-            AuthenticationServiceImpl authService,
-            TokenServiceImpl tokenServiceImpl,
-            UsuarioRepository usuarioRepository) {
+    public SecurityConfig(AuthenticationServiceImpl authService, TokenServiceImpl tokenServiceImpl, UsuarioRepository usuarioRepository) {
         this.authService = authService;
         this.tokenServiceImpl = tokenServiceImpl;
         this.usuarioRepository = usuarioRepository;
@@ -40,19 +37,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                .antMatchers(POST, "/auth").permitAll()
-                .antMatchers(POST, "/usuario/open/**").permitAll()
-                .antMatchers("/h2-console/", "/h2-console/**").permitAll()
-                .antMatchers(GET, "/users").hasRole("ADMIN")
-                .antMatchers("/idoso/**").hasRole("IDOSO")
-                .antMatchers("/prestador/**").hasRole("PRESTADOR")
+            .authorizeRequests()
+            .antMatchers(POST, "/auth").permitAll()
+            .antMatchers("/open/**").permitAll()
+            .antMatchers("/h2-console/", "/h2-console/**").permitAll()
+            .antMatchers("/idoso/**").hasRole("IDOSO")
+            .antMatchers("/prestador/**").hasRole("PRESTADOR")
+            .antMatchers("/anuncio/**").hasAnyRole("PRESTADOR", "IDOSO")
 
-                .anyRequest().authenticated()
-                .and()
-                .csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .addFilterBefore(new AutenticacaoViaTokenFilter(tokenServiceImpl, usuarioRepository), UsernamePasswordAuthenticationFilter.class);
+            .anyRequest().authenticated()
+            .and()
+            .csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .addFilterBefore(new AutenticacaoViaTokenFilter(tokenServiceImpl, usuarioRepository), UsernamePasswordAuthenticationFilter.class);
 
         http.headers().frameOptions().sameOrigin();
         http.cors().configurationSource(req -> new CorsConfiguration().applyPermitDefaultValues());
@@ -62,13 +59,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(authService).passwordEncoder(new BCryptPasswordEncoder());
     }
-
     @Override
     @Bean
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
