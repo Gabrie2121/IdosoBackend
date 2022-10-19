@@ -9,10 +9,12 @@ import javax.persistence.*;
 import com.idoso.backend.api.domain.enuns.FormaPagamentoEnum;
 import com.idoso.backend.api.domain.enuns.TipoPessoaEnum;
 import com.idoso.backend.api.domain.enuns.TipoUsuarioEnum;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
+@Setter
 public final class UsuarioEntity implements UserDetails {
 
     private static final String EMPTY_CONTENT = "N/A";

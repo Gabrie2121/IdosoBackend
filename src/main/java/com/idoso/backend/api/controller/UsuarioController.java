@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,12 +22,15 @@ import com.idoso.backend.api.domain.entities.UsuarioEntity;
 import com.idoso.backend.api.domain.repository.UsuarioRepository;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/usuario/open")
 @CrossOrigin
 public class UsuarioController {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+
+	@Autowired
+	PasswordEncoder encoder;
 	
 
 	@GetMapping("/all")
@@ -36,6 +40,7 @@ public class UsuarioController {
 	
 	@PostMapping("/post")
 	public UsuarioEntity post(@Validated @RequestBody UsuarioEntity usuario) {
+		usuario.setPassword(encoder.encode(usuario.getPassword()));
 		return usuarioRepository.save(usuario);
 	}
 	
