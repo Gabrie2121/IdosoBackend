@@ -2,13 +2,12 @@ package com.idoso.backend.api.domain.entities;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity
+@Table(name = "tb_profiles")
 public class ProfileEntity implements GrantedAuthority {
 
     @Id

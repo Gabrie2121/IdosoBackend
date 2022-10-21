@@ -52,25 +52,22 @@ public class AnuncioServiceImpl implements AnuncioService {
 
     @Transactional
     public AnuncioEntity criarAnuncio(AnuncioDTO dto) {
-
-        //salva o endereço e associa o endereço com o idoso
-        EnderecoEntity  endereco = enderecoRepository.save(dto.getIdoso().getEndereco());
+        UsuarioEntity usuario = usuarioRepository.findById(dto.getUsuario().getId()).get();
         IdosoEntity idoso = dto.getIdoso();
-        idoso.setEndereco(endereco);
-
-        //Salva o idoso e associa o idoso com o anuncio
+        idoso.setUsuario(usuario);
+        dto.setUsuario(usuario);
         IdosoEntity idosoSalvo = idosoRepository.save(idoso);
         dto.setIdoso(idosoSalvo);
 
-        //Busca o usuário no banco e associa o usuario com o Anuncio
-        UsuarioEntity usuario = usuarioRepository.findById(dto.getUsuario().getId()).get();
-        dto.setUsuario(usuario);
 
-        //Pega os bytes da foto do idoso e separa
+        EnderecoEntity  endereco = enderecoRepository.save(dto.getIdoso().getEndereco());
+
+        idoso.setEndereco(endereco);
+
+
         String temp = dto.getFoto();
         dto.setFoto("");
 
-        //Pega os bytes dos laudos e separa
         List<Laudo> laudosTemp = dto.getLaudos();
 
         AnuncioEntity anuncioASerSalvo = AnuncioEntity

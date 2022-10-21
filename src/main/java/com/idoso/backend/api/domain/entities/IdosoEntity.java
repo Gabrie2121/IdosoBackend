@@ -16,7 +16,7 @@ import static javax.persistence.EnumType.STRING;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "idoso")
+@Table(name = "tb_idosos")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
