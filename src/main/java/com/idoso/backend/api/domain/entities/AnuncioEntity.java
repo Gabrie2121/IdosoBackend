@@ -1,20 +1,21 @@
 package com.idoso.backend.api.domain.entities;
 
-import static java.util.Objects.isNull;
-import static javax.persistence.EnumType.STRING;
-import static javax.persistence.GenerationType.IDENTITY;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import javax.persistence.*;
+import com.idoso.backend.api.domain.dto.request.Laudo;
 import com.idoso.backend.api.domain.enuns.FrequenciaEnum;
 import com.idoso.backend.api.domain.enuns.PeriodoEnum;
+import com.idoso.backend.api.domain.enuns.SituacaoEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.EnumType.STRING;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "anuncio")
@@ -28,33 +29,28 @@ public final class AnuncioEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     private IdosoEntity idoso;
-
     @ManyToOne
     private UsuarioEntity usuario;
 
     @Enumerated(STRING)
     private PeriodoEnum periodo;
 
+    private String descricao;
+
     @Enumerated(STRING)
     private FrequenciaEnum frequencia;
 
-    private BigDecimal pagamentBase;
+    private String horaInicio;
 
+    private String horaFim;
+
+    private BigDecimal pagamentoBase;
 
     private Boolean moraJunto;
 
-    private Boolean ativo;
+    @Enumerated(STRING)
+    private SituacaoEnum situacao;
 
-    @OneToOne(mappedBy = "anuncio")
-    private TrabalhoEntity trabalho;
-
-    @PrePersist
-    public void setAtivo() {
-        if (isNull(ativo)) ativo = true;
-    }
-
-    @OneToMany
-    private List<LaudoEntity> laudos = new ArrayList<>();
 }

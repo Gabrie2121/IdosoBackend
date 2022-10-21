@@ -5,6 +5,7 @@ import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.EAGER;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,8 +14,8 @@ import com.idoso.backend.api.domain.enuns.TipoPessoaEnum;
 import com.idoso.backend.api.domain.enuns.TipoUsuarioEnum;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 @Entity
 @Data
 @Builder
@@ -56,11 +57,8 @@ public final class UsuarioEntity implements UserDetails {
 
     private String biografia;
 
-    @OneToMany
-    private List<IdosoEntity> idosos = new ArrayList<>();
-
-    @OneToMany
-    private List<EnderecoEntity> enderecos = new ArrayList<>();
+    @OneToOne(mappedBy = "usuario")
+    private EnderecoEntity endereco;
 
     @Enumerated(STRING)
     @JsonProperty("tipoPessoa")
@@ -86,14 +84,8 @@ public final class UsuarioEntity implements UserDetails {
 
     private String email;
 
-    @OneToOne(mappedBy = "prestador")
-    private TrabalhoEntity trabalhoPrestador;
-
-    @OneToOne(mappedBy = "idoso")
-    private TrabalhoEntity trabalhoIdoso;
-
-    @OneToMany
-    private List<AnuncioEntity> anuncios = new ArrayList<>();
+//    @OneToMany(mappedBy = "usuario")
+//    private List<AnuncioEntity> anuncios = new ArrayList<>();
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return profileEntities;

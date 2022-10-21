@@ -1,25 +1,41 @@
 package com.idoso.backend.api.domain.service;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.idoso.backend.api.domain.dto.request.AnuncioDTO;
+import com.idoso.backend.api.domain.dto.request.Laudo;
+import com.idoso.backend.api.domain.entities.*;
+import com.idoso.backend.api.domain.repository.*;
+import com.idoso.backend.api.service.FileService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.exception.ObjectNotFoundException;
-import com.idoso.backend.api.domain.repository.AnuncioRepository;
 import com.idoso.backend.api.domain.service.contracts.AnuncioService;
 
-@Service
-public final class AnuncioServiceImpl implements AnuncioService {
+import javax.transaction.Transactional;
 
-    @Autowired
+@Service
+@RequiredArgsConstructor
+public class AnuncioServiceImpl implements AnuncioService {
+
     private final AnuncioRepository anuncioRepository;
 
-    public AnuncioServiceImpl(AnuncioRepository anuncioRepository) {
-        this.anuncioRepository = anuncioRepository;
-    }
+    private final IdosoRepository idosoRepository;
+
+    private final EnderecoRepository enderecoRepository;
+
+
+    private final UsuarioRepository usuarioRepository;
+
+    private final FileService fileService;
+
+    @Value("${idoso.anuncioFolder}")
+    private String anunciosFolder;
+
 
     @Override
     public AnuncioEntity findById(Long id) throws ObjectNotFoundException {
@@ -32,5 +48,67 @@ public final class AnuncioServiceImpl implements AnuncioService {
 
     public List<AnuncioEntity> findAll() {
         return anuncioRepository.findAll();
+    }
+
+    @Transactional
+    public AnuncioEntity criarAnuncio(AnuncioDTO dto) {
+
+        //salva o endereço e associa o endereço com o idoso
+        EnderecoEntity  endereco = enderecoRepository.save(dto.getIdoso().getEndereco());
+        IdosoEntity idoso = dto.getIdoso();
+        idoso.setEndereco(endereco);
+
+        //Salva o idoso e associa o idoso com o anuncio
+        IdosoEntity idosoSalvo = idosoRepository.save(idoso);
+        dto.setIdoso(idosoSalvo);
+
+        //Busca o usuário no banco e associa o usuario com o Anuncio
+        UsuarioEntity usuario = usuarioRepository.findById(dto.getUsuario().getId()).get();
+        dto.setUsuario(usuario);
+
+        //Pega os bytes da foto do idoso e separa
+        String temp = dto.getFoto();
+        dto.setFoto("");
+
+        //Pega os bytes dos laudos e separa
+        List<Laudo> laudosTemp = dto.getLaudos();
+
+        AnuncioEntity anuncioASerSalvo = AnuncioEntity
+                .builder()
+                .descricao(dto.getDescricao())
+                .usuario(dto.getUsuario())
+                .idoso(dto.getIdoso())
+                .periodo(dto.getPeriodo())
+                .frequencia(dto.getFrequencia())
+                .pagamentoBase(dto.getPagamentoBase())
+                .horaInicio(dto.getHoraInicio())
+                .horaFim(dto.getHoraFim())
+                .moraJunto(dto.getMoraJunto())
+                .descricao(dto.getDescricao())
+                .situacao(dto.getSituacao())
+                .build();
+        //Salva o anuncio
+        AnuncioEntity anuncioSalvo = anuncioRepository.save(anuncioASerSalvo);
+
+        String osName = System.getProperty("os.name");
+        String separator = osName.contains("Windows") ? "\\" : "/";
+
+        //Atualiza o anuncio no banco com o path da foto
+        String fotoPath = anunciosFolder + separator + "FIA"+ String.format("%05d" , anuncioSalvo.getId())+".jpg";
+
+        //Salva a foto do idoso no diretório de anuncios
+        fileService.converteBytesParaArquivo(fotoPath, temp);
+
+        int count = 1;
+        Iterator<Laudo> iterator = laudosTemp.iterator();
+
+        while(iterator.hasNext()){
+            Laudo laudo = iterator.next();
+            String novoPath = anunciosFolder + separator + "L"+ String.format("%05d" , count) + "A"+String.format("%05d", anuncioSalvo.getId())+".jpg";
+            fileService.converteBytesParaArquivo(novoPath, laudo.getData());
+        }
+
+        return anuncioSalvo;
+
     }
 }

@@ -2,15 +2,10 @@ package com.idoso.backend.api.controller;
 
 import com.idoso.backend.api.domain.entities.UsuarioEntity;
 import com.idoso.backend.api.domain.repository.UsuarioRepository;
-import com.idoso.backend.api.service.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +19,6 @@ public class UsuarioController {
 
 	private final UsuarioRepository usuarioRepository;
 
-	private final ImageService imageService;
 
 	@GetMapping("/all")
 	public List<UsuarioEntity> getAll(){
@@ -42,11 +36,7 @@ public class UsuarioController {
 	}
 
 
-//	@GetMapping(path = "/images/profile/{idUsuario}", produces = MediaType.IMAGE_PNG_VALUE)
-//	@ResponseBody
-//	public byte[] getBytes(@PathVariable("idUsuario") String idUsuario) {
-//		return imageService.getBytes(Long.parseLong(idUsuario));
-//	}
+
 
 	@GetMapping("/getById/{idUsuario}")
 	public ResponseEntity<UsuarioEntity> getById (@PathVariable("idUsuario") String idUsuario) {

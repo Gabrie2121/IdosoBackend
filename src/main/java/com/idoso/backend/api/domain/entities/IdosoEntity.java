@@ -1,5 +1,6 @@
 package com.idoso.backend.api.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.idoso.backend.api.domain.enuns.GrauParentescoEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,25 +30,34 @@ public final class IdosoEntity {
     @Column(length = 50)
     private String nome;
 
-    @Column(length = 50)
-    private String apelido;
+    private String sobrenome;
 
     private Date dataNasc;
 
+    private String idade;
+
+    @JsonProperty("cpf")
     private String nDoc;
 
     private Character genero;
 
     private Boolean pcd;
 
-    @ManyToOne
+    private Boolean disturbio;
+
+    @OneToOne
     private UsuarioEntity usuario;
 
     @OneToMany
     private List<DoencaEntity> doencas = new ArrayList<>();
 
-    private String detalheDoenca;
-
     @Enumerated(STRING)
+    @JsonProperty("grauParentesco")
     private GrauParentescoEnum grauParentesco;
+
+//    @OneToOne(mappedBy = "idoso")
+//    private AnuncioEntity anuncio;
+
+    @OneToOne(mappedBy = "idoso")
+    private EnderecoEntity endereco;
 }

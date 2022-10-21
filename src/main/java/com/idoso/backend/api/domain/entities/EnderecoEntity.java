@@ -1,6 +1,10 @@
 package com.idoso.backend.api.domain.entities;
 
 import com.idoso.backend.api.domain.enuns.TipoEnderecoEnum;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -9,6 +13,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "endereco")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
 public final class EnderecoEntity {
 
     @Id
@@ -19,8 +27,6 @@ public final class EnderecoEntity {
 
     private String logradouro;
 
-    private String bairro;
-
     private String cidade;
 
     @Column(length = 2)
@@ -28,6 +34,14 @@ public final class EnderecoEntity {
 
     private String complemento;
 
-    @Enumerated(STRING)
-    private TipoEnderecoEnum tipoEndereco;
+    private String apelido;
+
+    private Boolean principal;
+
+    @OneToOne
+    private UsuarioEntity usuario;
+
+    @OneToOne
+    private IdosoEntity idoso;
+
 }

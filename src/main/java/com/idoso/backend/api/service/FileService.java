@@ -10,7 +10,7 @@ import java.util.Base64;
 
 @Service
 @Slf4j
-public class ImageService {
+public class FileService {
 
     public String converteBytesParaArquivo(String path, String bytes) {
 
@@ -25,8 +25,7 @@ public class ImageService {
    }
 
 
-
-    public String converteArquivoParaBytes(String pathToFile) {
+   public String converteArquivoParaBytes(String pathToFile) {
         byte[] fileContent = new byte[0];
 
         try {
