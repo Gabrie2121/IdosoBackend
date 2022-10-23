@@ -49,8 +49,4 @@ public final class AnuncioEntity {
     private BigDecimal pagamentoBase;
 
     private Boolean moraJunto;
-
-    @Enumerated(STRING)
-    private SituacaoEnum situacao;
-
 }

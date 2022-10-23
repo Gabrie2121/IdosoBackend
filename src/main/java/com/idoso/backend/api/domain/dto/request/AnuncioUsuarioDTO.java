@@ -10,21 +10,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
-import static javax.persistence.EnumType.STRING;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AnuncioDTO {
+public class AnuncioUsuarioDTO {
 
     private List<Laudo> laudos = new ArrayList<>();
     private IdosoEntity idoso;

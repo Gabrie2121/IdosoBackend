@@ -47,8 +47,11 @@ public class AuthenticationControllerImpl implements AuthenticationController {
 
         try {
             Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-            String token = authenticationService.generateTokenJWT(authenticate);
-            return ResponseEntity.ok(new TokenDto(token, "Bearer ", Long.toString(expiration)));
+            String[] tokenData = authenticationService.generateTokenJWT(authenticate);
+
+
+
+            return ResponseEntity.ok(new TokenDto(tokenData[1], "Bearer", tokenData[0], Long.toString(expiration)));
         } catch (AuthenticationException e) {
             log.info("Ocorreu um erro interno:");
             log.info(e.getMessage());

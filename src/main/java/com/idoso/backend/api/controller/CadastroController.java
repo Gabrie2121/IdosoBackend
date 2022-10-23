@@ -1,5 +1,6 @@
 package com.idoso.backend.api.controller;
 
+import com.idoso.backend.api.domain.entities.CursoPrestadorEntity;
 import com.idoso.backend.api.domain.entities.EnderecoEntity;
 import com.idoso.backend.api.domain.entities.ProfileEntity;
 import com.idoso.backend.api.domain.entities.UsuarioEntity;
@@ -7,6 +8,7 @@ import com.idoso.backend.api.domain.enuns.TipoPessoaEnum;
 import com.idoso.backend.api.domain.exception.DocumentoNaoEncontradoException;
 import com.idoso.backend.api.domain.exception.ObjectNotFoundException;
 import com.idoso.backend.api.domain.exception.UsuarioExistenteException;
+import com.idoso.backend.api.domain.repository.CursoPrestadorRepository;
 import com.idoso.backend.api.domain.repository.EnderecoRepository;
 import com.idoso.backend.api.domain.repository.ProfileRepository;
 import com.idoso.backend.api.domain.repository.UsuarioRepository;
@@ -18,10 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 
 @RestController
@@ -40,7 +39,6 @@ public class CadastroController {
     private final ProfileRepository profileRepository;
 
     private final EnderecoRepository enderecoRepository;
-
     @Value("${idoso.profileFolder}")
     private String profileFolder;
 
@@ -59,31 +57,67 @@ public class CadastroController {
             throw new UsuarioExistenteException("Este usuário já foi cadastrado");
         }
 
-
-        String osName = System.getProperty("os.name");
-        String separator = osName.contains("Windows") ? "\\" : "/";
-
-
         usuario.setPassword(encoder.encode(usuario.getPassword()));
+
         usuario.setAvaliacao(0.0);
+
+        salvarFotoPerfil(usuario);
+
+        salvarEndereco(usuario);
+
+        setProfiles(usuario);
+
+        if(usuario.getTipoPessoa() == TipoPessoaEnum.JURIDICA) {
+            String separador = getSeparator();
+            final int[] count = {1};
+
+            usuario.getCertificados().forEach(c -> {
+                String path = profileFolder + separador + usuario.getNDoc() + " certificado " +
+                        String.format("%04d", count[0])+".pdf";
+                count[0]++;
+                fileService.converteBytesParaArquivo(path, c);
+            });
+
+        }
+
+        return usuarioRepository.save(usuario);
+
+    }
+
+    private void salvarFotoPerfil(UsuarioEntity usuario) {
         String temp = usuario.getFoto();
+        String separator = getSeparator();
         String path = profileFolder + separator + usuario.getNDoc() + "profile.jpg";
         usuario.setFoto(path);
+        salvarFotoDePerfil(temp, path);
+    }
 
+    private  String getSeparator() {
+        String osName = System.getProperty("os.name");
+       return osName.contains("Windows") ? "\\" : "/";
+    }
+
+    private void salvarEndereco(UsuarioEntity usuario) {
         EnderecoEntity endereco = usuario.getEndereco();
-        usuario.setEndereco(enderecoRepository.save(
-                EnderecoEntity
-                        .builder()
-                        .cep(endereco.getCep())
-                        .uf(endereco.getUf())
-                        .cidade(endereco.getCidade())
-                        .logradouro(endereco.getLogradouro())
-                        .complemento(endereco.getComplemento())
-                        .apelido(endereco.getApelido())
-                        .principal(endereco.getPrincipal())
-                        .build()
-        ));
 
+        usuario.setEndereco(enderecoRepository.save(
+            EnderecoEntity
+                .builder()
+                .cep(endereco.getCep())
+                .uf(endereco.getUf())
+                .cidade(endereco.getCidade())
+                .logradouro(endereco.getLogradouro())
+                .complemento(endereco.getComplemento())
+                .apelido(endereco.getApelido())
+                .principal(endereco.getPrincipal())
+                .build()
+        ));
+    }
+
+    private void salvarFotoDePerfil(String temp, String path) {
+        fileService.converteBytesParaArquivo(path, temp);
+    }
+    private void setProfiles(UsuarioEntity usuario) {
         List<ProfileEntity> profiles;
 
         if(usuario.getTipoPessoa() == TipoPessoaEnum.FISICA) {
@@ -94,14 +128,5 @@ public class CadastroController {
         }
 
         usuario.setProfileEntities(profiles);
-
-        UsuarioEntity usuarioSalvo =  usuarioRepository.save(usuario);
-
-
-        fileService.converteBytesParaArquivo(path, temp);
-
-
-        return usuarioSalvo;
-
     }
 }

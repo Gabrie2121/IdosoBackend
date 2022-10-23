@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.idoso.backend.api.domain.dto.request.Certificado;
+import com.idoso.backend.api.domain.enuns.CursoEnum;
 import com.idoso.backend.api.domain.enuns.FormaPagamentoEnum;
 import com.idoso.backend.api.domain.enuns.TipoPessoaEnum;
 import com.idoso.backend.api.domain.enuns.TipoUsuarioEnum;
@@ -58,7 +60,7 @@ public final class UsuarioEntity implements UserDetails {
 
     private String biografia;
 
-    @OneToOne(mappedBy = "usuario")
+    @OneToOne
     private EnderecoEntity endereco;
 
     @Enumerated(STRING)
@@ -72,6 +74,9 @@ public final class UsuarioEntity implements UserDetails {
     private String foto;
 
     private Date dataCadastro;
+
+    @Enumerated(STRING)
+    private CursoEnum curso;
     @PrePersist
     public void setDataCadastro() {
         if (isNull(dataCadastro)) dataCadastro = new Date();
@@ -81,12 +86,14 @@ public final class UsuarioEntity implements UserDetails {
         if(isNull(nomeFantasia)) nomeFantasia = EMPTY_CONTENT;
 
         if(isNull(ie)) ie = EMPTY_CONTENT;
+
+        if(isNull(curso)) curso = CursoEnum.PESSOA_FISICA;
     }
 
     private String email;
 
-//    @OneToMany(mappedBy = "usuario")
-//    private List<AnuncioEntity> anuncios = new ArrayList<>();
+    @Transient
+    private List<String> certificados;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return profileEntities;

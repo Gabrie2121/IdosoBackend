@@ -23,9 +23,7 @@ import static org.springframework.http.HttpMethod.POST;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
     private final AuthenticationService authService;
-
     private final TokenService tokenService;
     private final UsuarioRepository usuarioRepository;
 
@@ -52,9 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(POST, "/auth").permitAll()
                 .antMatchers("/open/**").permitAll()
                 .antMatchers("/h2-console/", "/h2-console/**").permitAll()
-                .antMatchers("/idoso/**").authenticated()
-                .antMatchers("/prestador/**").authenticated()
+                .antMatchers("/prestadores/**").authenticated()
                 .antMatchers("/anuncios/**").permitAll()
+                .antMatchers("/usuarios/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                 .csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

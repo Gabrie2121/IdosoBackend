@@ -3,7 +3,7 @@ spring:
     database: POSTGRESQL
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
   datasource:
     url: jdbc:postgresql://${database.host:82.180.160.174}:${database.port:5432}/${database.name:idosoprod}
     username: ${database.username:idoso}

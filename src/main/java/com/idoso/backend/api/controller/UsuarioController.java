@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/usuarios")
 @RequiredArgsConstructor
 @CrossOrigin
 public class UsuarioController {
@@ -60,6 +60,9 @@ public class UsuarioController {
 		return "Biografia modificada com sucesso";
 
 	}
+
+
+
 
 
 }

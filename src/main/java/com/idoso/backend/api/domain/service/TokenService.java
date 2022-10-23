@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
 
 @Service
 @Slf4j
@@ -21,18 +22,22 @@ public class TokenService {
     @Value("${idoso.jwt.tokenExpirationTime}")
     private Long expiration;
 
-    public String generateTokenJWT(Authentication authentication) {
+    public String[] generateTokenJWT(Authentication authentication) {
         UsuarioEntity user = (UsuarioEntity) authentication.getPrincipal();
         Date today = new Date();
         Date expirationTime = Date.from(Instant.now().plusSeconds(expiration));
 
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setIssuer("My API")
                 .setSubject(user.getUsername())
+                .setClaims(new HashMap<>())
                 .setIssuedAt(today)
                 .setExpiration(expirationTime)
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
+
+
+        return new String[]{token, Long.toString(user.getId())};
     }
 
     public boolean isTokenValido(String token) {
@@ -48,7 +53,7 @@ public class TokenService {
 
     public Long getIdUsuario(String token) {
         Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-        return Long.parseLong(claims.getSubject());
+        return Long.parseLong(claims.getId());
     }
 
 }

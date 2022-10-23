@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import com.idoso.backend.api.domain.dto.request.AnuncioDTO;
+import com.idoso.backend.api.domain.dto.request.AnuncioUsuarioDTO;
 import com.idoso.backend.api.domain.dto.request.Laudo;
 import com.idoso.backend.api.domain.entities.*;
 import com.idoso.backend.api.domain.repository.*;
@@ -51,7 +51,7 @@ public class AnuncioServiceImpl implements AnuncioService {
     }
 
     @Transactional
-    public AnuncioEntity criarAnuncio(AnuncioDTO dto) {
+    public AnuncioEntity criarAnuncio(AnuncioUsuarioDTO dto) {
         UsuarioEntity usuario = usuarioRepository.findById(dto.getUsuario().getId()).get();
         IdosoEntity idoso = dto.getIdoso();
         idoso.setUsuario(usuario);
@@ -82,7 +82,6 @@ public class AnuncioServiceImpl implements AnuncioService {
                 .horaFim(dto.getHoraFim())
                 .moraJunto(dto.getMoraJunto())
                 .descricao(dto.getDescricao())
-                .situacao(dto.getSituacao())
                 .build();
         //Salva o anuncio
         AnuncioEntity anuncioSalvo = anuncioRepository.save(anuncioASerSalvo);

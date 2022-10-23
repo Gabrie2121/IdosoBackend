@@ -1,11 +1,10 @@
 package com.idoso.backend.api.controller;
 
 import com.idoso.backend.api.controller.contracts.AnuncioController;
-import com.idoso.backend.api.domain.dto.request.AnuncioDTO;
+import com.idoso.backend.api.domain.dto.request.AnuncioUsuarioDTO;
 import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.exception.ObjectNotFoundException;
 import com.idoso.backend.api.domain.service.AnuncioServiceImpl;
-import com.idoso.backend.api.domain.service.contracts.AnuncioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +30,7 @@ public class AnuncioControllerImpl implements AnuncioController {
 
 
     @PostMapping("novo")
-    public ResponseEntity<AnuncioEntity> criarAnuncio(@RequestBody AnuncioDTO request) {
+    public ResponseEntity<AnuncioEntity> criarAnuncio(@RequestBody AnuncioUsuarioDTO request) {
         return ResponseEntity.ok(service.criarAnuncio(request));
     }
 

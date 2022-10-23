@@ -38,7 +38,7 @@ public final class EnderecoEntity {
 
     private Boolean principal;
 
-    @OneToOne
+    @OneToOne(mappedBy = "endereco")
     private UsuarioEntity usuario;
 
     @OneToOne

@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public final class TokenDto {
+    private final String userId;
     private final String type;
     private final String token;
     private final String expiration;
