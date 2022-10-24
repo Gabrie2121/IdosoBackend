@@ -1,7 +1,9 @@
 package com.idoso.backend.api.controller;
 
+import com.idoso.backend.api.domain.dto.response.HomeUsuarioDTO;
 import com.idoso.backend.api.domain.entities.UsuarioEntity;
 import com.idoso.backend.api.domain.repository.UsuarioRepository;
+import com.idoso.backend.api.domain.service.contracts.IdosoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +14,14 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/idoso")
 @RequiredArgsConstructor
 @CrossOrigin
 public class UsuarioController {
 
 	private final UsuarioRepository usuarioRepository;
+
+	private final IdosoService idosoService;
 
 
 	@GetMapping("/all")
@@ -60,6 +64,16 @@ public class UsuarioController {
 		return "Biografia modificada com sucesso";
 
 	}
+
+	@GetMapping("/home")
+	public ResponseEntity<HomeUsuarioDTO> getHome(@RequestBody UsuarioEntity usuarioEntity) {
+
+		HomeUsuarioDTO homeData = idosoService.getHome(usuarioEntity.getId());
+
+		return ResponseEntity.ok(homeData);
+	}
+
+
 
 
 

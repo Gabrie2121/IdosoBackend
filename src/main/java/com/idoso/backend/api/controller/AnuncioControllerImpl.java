@@ -2,6 +2,7 @@ package com.idoso.backend.api.controller;
 
 import com.idoso.backend.api.controller.contracts.AnuncioController;
 import com.idoso.backend.api.domain.dto.request.AnuncioUsuarioDTO;
+import com.idoso.backend.api.domain.dto.response.AnuncioCriadoDTO;
 import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.exception.ObjectNotFoundException;
 import com.idoso.backend.api.domain.service.AnuncioServiceImpl;
@@ -30,8 +31,14 @@ public class AnuncioControllerImpl implements AnuncioController {
 
 
     @PostMapping("novo")
-    public ResponseEntity<AnuncioEntity> criarAnuncio(@RequestBody AnuncioUsuarioDTO request) {
-        return ResponseEntity.ok(service.criarAnuncio(request));
+    public ResponseEntity<AnuncioCriadoDTO> criarAnuncio(@RequestBody AnuncioUsuarioDTO request) {
+        AnuncioEntity anunciodb = service.criarAnuncio(request);
+
+        return ResponseEntity.ok(AnuncioCriadoDTO
+                .builder()
+                    .nomeIdoso(anunciodb.getIdoso().getNome())
+                    .id(anunciodb.getId())
+                .build());
     }
 
 }

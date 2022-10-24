@@ -53,6 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/prestadores/**").authenticated()
                 .antMatchers("/anuncios/**").permitAll()
                 .antMatchers("/usuarios/**").permitAll()
+                .antMatchers("/idoso/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                 .csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

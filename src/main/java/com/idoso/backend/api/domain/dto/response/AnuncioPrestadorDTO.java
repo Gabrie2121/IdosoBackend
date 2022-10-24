@@ -1,27 +1,27 @@
 package com.idoso.backend.api.domain.dto.response;
 
-import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class HomeUsuarioDTO {
+@Data
+public class AnuncioPrestadorDTO {
+
+    private Long id;
 
     private String foto;
 
     private Double avaliacao;
 
-    private String cidade;
+    private Double valorHora;
 
-    private String biografia;
+    private String formado;
 
-    List<AnuncioPrestadorDTO> anuncios;
+    private String curso;
 
-
+    private String whatsapp;
 }
