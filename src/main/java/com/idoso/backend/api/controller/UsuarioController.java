@@ -65,10 +65,10 @@ public class UsuarioController {
 
 	}
 
-	@GetMapping("/home")
-	public ResponseEntity<HomeUsuarioDTO> getHome(@RequestBody UsuarioEntity usuarioEntity) {
+	@GetMapping("/home/{idUsuario}")
+	public ResponseEntity<HomeUsuarioDTO> getHome(@PathVariable String idUsuario) {
 
-		HomeUsuarioDTO homeData = idosoService.getHome(usuarioEntity.getId());
+		HomeUsuarioDTO homeData = idosoService.getHome(Long.parseLong(idUsuario));
 
 		return ResponseEntity.ok(homeData);
 	}
