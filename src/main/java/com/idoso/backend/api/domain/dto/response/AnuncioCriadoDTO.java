@@ -14,4 +14,6 @@ public class AnuncioCriadoDTO {
     private Long id;
 
     private String nomeIdoso;
+
+
 }

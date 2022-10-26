@@ -24,21 +24,22 @@ public class AnuncioControllerImpl implements AnuncioController {
 
     }
 
-    @GetMapping()
-    public ResponseEntity<List<AnuncioEntity>> findAll() {
-        return null;
-    }
-
-
-    @PostMapping("novo")
+    @PostMapping("/novo")
     public ResponseEntity<AnuncioCriadoDTO> criarAnuncio(@RequestBody AnuncioUsuarioDTO request) {
         AnuncioEntity anunciodb = service.criarAnuncio(request);
-
         return ResponseEntity.ok(AnuncioCriadoDTO
                 .builder()
                     .nomeIdoso(anunciodb.getIdoso().getNome())
                     .id(anunciodb.getId())
                 .build());
     }
+
+
+    @GetMapping("/all")
+    public ResponseEntity<List<AnuncioCriadoDTO>> findAll() {
+        return ResponseEntity.ok(service.findAll());
+    }
+
+
 
 }

@@ -1,11 +1,13 @@
 package com.idoso.backend.api.domain.service;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
 import com.idoso.backend.api.domain.dto.request.AnuncioUsuarioDTO;
 import com.idoso.backend.api.domain.dto.request.Laudo;
+import com.idoso.backend.api.domain.dto.response.AnuncioCriadoDTO;
 import com.idoso.backend.api.domain.entities.*;
 import com.idoso.backend.api.domain.repository.*;
 import com.idoso.backend.api.service.FileService;
@@ -46,8 +48,19 @@ public class AnuncioServiceImpl implements AnuncioService {
         throw new ObjectNotFoundException("Anúncio não encontrado");
     }
 
-    public List<AnuncioEntity> findAll() {
-        return anuncioRepository.findAll();
+    public List<AnuncioCriadoDTO> findAll() {
+        List<AnuncioEntity> all = anuncioRepository.findAll();
+
+        List<AnuncioCriadoDTO> anuncios = new ArrayList<>();
+
+        all.forEach(anuncio -> {
+            AnuncioCriadoDTO anuncioCriado = new AnuncioCriadoDTO();
+            anuncioCriado.setId(anuncio.getId());
+            anuncioCriado.setNomeIdoso(anuncio.getIdoso().getNome());
+            anuncios.add(anuncioCriado);
+        });
+
+        return anuncios;
     }
 
     @Transactional
@@ -59,11 +72,9 @@ public class AnuncioServiceImpl implements AnuncioService {
         IdosoEntity idosoSalvo = idosoRepository.save(idoso);
         dto.setIdoso(idosoSalvo);
 
-
         EnderecoEntity  endereco = enderecoRepository.save(dto.getIdoso().getEndereco());
 
         idoso.setEndereco(endereco);
-
 
         String temp = dto.getFoto();
         dto.setFoto("");
@@ -83,6 +94,7 @@ public class AnuncioServiceImpl implements AnuncioService {
                 .moraJunto(dto.getMoraJunto())
                 .descricao(dto.getDescricao())
                 .build();
+
         //Salva o anuncio
         AnuncioEntity anuncioSalvo = anuncioRepository.save(anuncioASerSalvo);
 
@@ -105,6 +117,5 @@ public class AnuncioServiceImpl implements AnuncioService {
         }
 
         return anuncioSalvo;
-
     }
 }

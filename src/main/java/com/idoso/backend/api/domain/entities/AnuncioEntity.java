@@ -49,4 +49,9 @@ public final class AnuncioEntity {
     private BigDecimal pagamentoBase;
 
     private Boolean moraJunto;
+
+    private SituacaoEnum situacaoEnum;
+
+    @OneToMany(mappedBy = "anuncio")
+    private List<CandidaturaEntity> candidaturas;
 }

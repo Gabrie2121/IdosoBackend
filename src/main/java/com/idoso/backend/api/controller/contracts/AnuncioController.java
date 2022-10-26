@@ -1,5 +1,6 @@
 package com.idoso.backend.api.controller.contracts;
 
+import com.idoso.backend.api.domain.dto.response.AnuncioCriadoDTO;
 import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.exception.ObjectNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,6 @@ public interface AnuncioController {
 
     ResponseEntity<AnuncioEntity> findById(@PathVariable Long id) throws ObjectNotFoundException;
 
-    ResponseEntity<List<AnuncioEntity>> findAll();
+    public ResponseEntity<List<AnuncioCriadoDTO>> findAll();
 
 }
