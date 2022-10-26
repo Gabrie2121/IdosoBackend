@@ -23,5 +23,7 @@ public class HomeUsuarioDTO {
 
     List<AnuncioPrestadorDTO> anuncios;
 
+    private String nome;
+
 
 }

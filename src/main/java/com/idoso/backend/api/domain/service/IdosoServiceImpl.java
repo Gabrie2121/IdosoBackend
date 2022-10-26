@@ -29,9 +29,9 @@ public final class IdosoServiceImpl implements IdosoService {
 
         return HomeUsuarioDTO
                 .builder()
+                .nome(usuario.getNome())
                 .avaliacao(usuario.getAvaliacao())
                 .biografia(usuario.getBiografia())
-
                 .foto(fileService.converteArquivoParaBytes(usuario.getFoto()))
                 .anuncios(Arrays.asList(
                         AnuncioPrestadorDTO.builder()
