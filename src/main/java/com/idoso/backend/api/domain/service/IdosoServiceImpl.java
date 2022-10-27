@@ -1,19 +1,18 @@
 package com.idoso.backend.api.domain.service;
 
-import com.idoso.backend.api.domain.dto.response.AnuncioPrestadorDTO;
+import com.idoso.backend.api.domain.dto.response.AnuncioDoUsuarioDTO;
 import com.idoso.backend.api.domain.dto.response.HomeUsuarioDTO;
+import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.entities.UsuarioEntity;
-import com.idoso.backend.api.domain.repository.IdosoRepository;
+import com.idoso.backend.api.domain.repository.AnuncioRepository;
 import com.idoso.backend.api.domain.repository.UsuarioRepository;
 import com.idoso.backend.api.domain.service.contracts.IdosoService;
 import com.idoso.backend.api.service.FileService;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +22,31 @@ public final class IdosoServiceImpl implements IdosoService {
 
     private final FileService fileService;
 
+    private final AnuncioRepository anuncioRepository;
+
     @Override
     public HomeUsuarioDTO getHome(Long id) {
         UsuarioEntity usuario = usuarioRepository.findById(id).get();
+        List<AnuncioEntity> anunciosDoBanco = anuncioRepository.findByUsuarioId(usuario.getId());
+        List<AnuncioDoUsuarioDTO> anunciosDto = new ArrayList<>();
+
+        anunciosDoBanco.forEach(anuncio -> {
+            AnuncioDoUsuarioDTO anuncioDto = AnuncioDoUsuarioDTO
+                    .builder()
+                    .id(anuncio.getId())
+                    .foto("teste")
+                    .avaliacao(anuncio.getUsuario().getAvaliacao())
+                    .formado("TESTE")
+                    .curso("TESTE")
+                    .nomeIdoso(anuncio.getIdoso().getNome())
+                    .valorHora(anuncio.getPagamentoBase().doubleValue())
+                    .whatsapp(anuncio.getUsuario().getCelular())
+                    .build();
+
+            anunciosDto.add(anuncioDto);
+        });
+
+
 
         return HomeUsuarioDTO
                 .builder()
@@ -33,25 +54,7 @@ public final class IdosoServiceImpl implements IdosoService {
                 .avaliacao(usuario.getAvaliacao())
                 .biografia(usuario.getBiografia())
                 .foto(fileService.converteArquivoParaBytes(usuario.getFoto()))
-                .anuncios(Arrays.asList(
-                        AnuncioPrestadorDTO.builder()
-                                .foto("bytes da foto")
-                                .formado("FORMADO")
-                                .curso("Enfermagem")
-                                .valorHora(200.00)
-                                .avaliacao(usuario.getAvaliacao())
-                                .whatsapp("9999999")
-                                .build(),
-
-                        AnuncioPrestadorDTO.builder()
-                                .foto("bytes da foto")
-                                .formado("FORMADO")
-                                .curso("Enfermagem")
-                                .valorHora(200.00)
-                                .avaliacao(usuario.getAvaliacao())
-                                .whatsapp("9999999")
-                                .build()
-                ))
+                .anuncios(anunciosDto)
                 .cidade(usuario.getEndereco().getCidade())
                 .build();
     }

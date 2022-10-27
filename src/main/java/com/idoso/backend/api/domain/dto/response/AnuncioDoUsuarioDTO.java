@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class AnuncioPrestadorDTO {
+public class AnuncioDoUsuarioDTO {
 
     private Long id;
 
@@ -24,4 +24,6 @@ public class AnuncioPrestadorDTO {
     private String curso;
 
     private String whatsapp;
+
+    private String nomeIdoso;
 }

@@ -12,4 +12,6 @@ import java.util.List;
 @Repository
 public interface AnuncioRepository extends JpaRepository<AnuncioEntity, Long> {
 
+    List<AnuncioEntity> findByUsuarioId(Long usuarioId);
+
 }
