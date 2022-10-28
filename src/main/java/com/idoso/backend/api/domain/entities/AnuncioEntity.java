@@ -31,6 +31,7 @@ public final class AnuncioEntity {
 
     @OneToOne
     private IdosoEntity idoso;
+
     @ManyToOne
     private UsuarioEntity usuario;
 

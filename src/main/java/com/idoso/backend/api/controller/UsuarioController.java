@@ -1,17 +1,27 @@
 package com.idoso.backend.api.controller;
 
+import com.idoso.backend.api.domain.dto.response.CandidaturaAceitaDTO;
+import com.idoso.backend.api.domain.dto.response.CandidaturaAnuncioDTO;
 import com.idoso.backend.api.domain.dto.response.HomeUsuarioDTO;
+import com.idoso.backend.api.domain.entities.CandidaturaEntity;
+import com.idoso.backend.api.domain.entities.IdosoEntity;
 import com.idoso.backend.api.domain.entities.UsuarioEntity;
+import com.idoso.backend.api.domain.enuns.StatusCandidaturaEnum;
+import com.idoso.backend.api.domain.repository.CandidaturaRepository;
 import com.idoso.backend.api.domain.repository.UsuarioRepository;
 import com.idoso.backend.api.domain.service.contracts.IdosoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/idoso")
@@ -19,57 +29,115 @@ import java.util.Optional;
 @CrossOrigin
 public class UsuarioController {
 
-	private final UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
-	private final IdosoService idosoService;
+    private final IdosoService idosoService;
 
-
-	@GetMapping("/all")
-	public List<UsuarioEntity> getAll(){
-		return usuarioRepository.findAll();
-	}
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<UsuarioEntity> delete(@PathVariable(value="id") long id){
-		Optional<UsuarioEntity> cadastroPF = usuarioRepository.findById(id);
-		if(cadastroPF.isPresent()) {
-			usuarioRepository.delete(cadastroPF.get());
-			return new ResponseEntity<>(HttpStatus.OK);
-		}else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
+    private final CandidaturaRepository candidaturaRepository;
 
 
+    @GetMapping("/all")
+    public List<UsuarioEntity> getAll() {
+        return usuarioRepository.findAll();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<UsuarioEntity> delete(@PathVariable(value = "id") long id) {
+        Optional<UsuarioEntity> cadastroPF = usuarioRepository.findById(id);
+        if (cadastroPF.isPresent()) {
+            usuarioRepository.delete(cadastroPF.get());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/getById/{idUsuario}")
+    public ResponseEntity<UsuarioEntity> getById(@PathVariable("idUsuario") String idUsuario) {
+        UsuarioEntity usuario = usuarioRepository.findById(Long.parseLong(idUsuario))
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado id " + idUsuario));
+
+        return ResponseEntity.ok(usuario);
+    }
+
+    @PatchMapping("/atualizaBiografia")
+    public String atualizarBioagrafia(@RequestBody UsuarioEntity usuario) {
+        Long id = usuario.getId();
+
+        UsuarioEntity bdUsuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado id " + id));
+
+        bdUsuario.setBiografia(usuario.getBiografia());
+
+        usuarioRepository.save(bdUsuario);
+
+        return "Biografia modificada com sucesso";
+
+    }
+
+    @GetMapping("/home/{idUsuario}")
+    public ResponseEntity<HomeUsuarioDTO> getHome(@PathVariable String idUsuario) {
+        HomeUsuarioDTO homeData = idosoService.getHome(Long.parseLong(idUsuario));
+        return ResponseEntity.ok(homeData);
+    }
+
+    @GetMapping("/home/candidaturas/{idUsuario}")
+    public ResponseEntity<List<CandidaturaAnuncioDTO>> getCandidaturas(@PathVariable String idUsuario) {
+        UsuarioEntity usuario = usuarioRepository.findById(Long.parseLong(idUsuario)).get();
+
+        List<CandidaturaEntity> candidaturas = candidaturaRepository.candidaturasByUser(usuario);
+        List<CandidaturaAnuncioDTO> listaDTO = new ArrayList<>();
+
+        candidaturas.forEach(c -> {
+            IdosoEntity idoso = c.getAnuncio().getIdoso();
+            UsuarioEntity prestador = c.getPrestador();
+            listaDTO.add(CandidaturaAnuncioDTO
+                    .builder()
+                            .id(c.getId())
+                            .biografiaPrestador(prestador.getBiografia())
+                            .formacao(prestador.getCurso().name())
+                            .curso(prestador.getCurso())
+                            .whatsapp(prestador.getCelular())
+                            .avaliacao(prestador.getAvaliacao())
+                            .nomePrestador(prestador.getNome())
+                            .laudos(Arrays.asList("laudo 1", "laudo 2"))
+                            .fotoPrestador("Foto prestador")
+                            .formado(prestador.getFormado())
+                            .foto("Foto parente")
+                            .nomeIdoso(idoso.getNome() + " " + idoso.getSobrenome())
+                    .build());
+        });
+
+        return ResponseEntity.ok(listaDTO);
+    }
 
 
-	@GetMapping("/getById/{idUsuario}")
-	public ResponseEntity<UsuarioEntity> getById (@PathVariable("idUsuario") String idUsuario) {
-		UsuarioEntity usuario = usuarioRepository.findById(Long.parseLong(idUsuario))
-				.orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado id "+ idUsuario ));
+    @PatchMapping("/candidaturas/aceitar/{candidaturaId}")
+    @Transactional
+    public ResponseEntity<?> aceitarCandidatura(@PathVariable String candidaturaId) {
+        CandidaturaEntity candidatura = candidaturaRepository.findById(Long.parseLong(candidaturaId)).get();
+        candidaturaRepository.updateCandidatura(StatusCandidaturaEnum.ACEITA, candidatura.getId());
 
-		return ResponseEntity.ok(usuario);
-	}
 
-	@PatchMapping("/atualizaBiografia")
-	public String atualizarBioagrafia(@RequestBody UsuarioEntity usuario) {
-		Long id = usuario.getId();
+        List<CandidaturaEntity> candidaturasNaoAceitas = candidaturaRepository.candidaturasByAnuncio(candidatura.getAnuncio())
+                .stream()
+                .filter(c -> c.getId() != Long.parseLong(candidaturaId))
+                .peek(c -> c.setStatus(StatusCandidaturaEnum.NAO_ACEITA))
+                .collect(Collectors.toList());
+        candidaturaRepository.saveAll(candidaturasNaoAceitas);
 
-		UsuarioEntity bdUsuario = usuarioRepository.findById(id)
-				.orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado id "+ id));
+        IdosoEntity idoso = candidatura.getAnuncio().getIdoso();
+        CandidaturaAceitaDTO retorno = CandidaturaAceitaDTO
+                .builder()
+                .candidaturaId(Long.parseLong(candidaturaId))
+                .status(StatusCandidaturaEnum.ACEITA)
+                .prestadorId(candidatura.getPrestador().getId())
+                .nomeIdoso(idoso.getNome() + " " + idoso.getSobrenome())
+                .build();
 
-		bdUsuario.setBiografia(usuario.getBiografia());
+        return ResponseEntity.ok(retorno);
+    }
 
-		usuarioRepository.save(bdUsuario);
-
-		return "Biografia modificada com sucesso";
-
-	}
-
-	@GetMapping("/home/{idUsuario}")
-	public ResponseEntity<HomeUsuarioDTO> getHome(@PathVariable String idUsuario) {
-		HomeUsuarioDTO homeData = idosoService.getHome(Long.parseLong(idUsuario));
-		return ResponseEntity.ok(homeData);
-	}
 
 }
 

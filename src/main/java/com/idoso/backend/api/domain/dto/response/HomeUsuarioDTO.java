@@ -20,7 +20,7 @@ public class HomeUsuarioDTO {
 
     private String biografia;
 
-    List<AnuncioDoUsuarioDTO> anuncios;
+    List<CandidaturaAnuncioDTO> candidaturas;
 
     private String nome;
 

@@ -21,7 +21,9 @@ import java.util.List;
 public class AnuncioUsuarioDTO {
 
     private List<Laudo> laudos = new ArrayList<>();
+
     private IdosoEntity idoso;
+
     private UsuarioEntity usuario;
 
     private String foto;

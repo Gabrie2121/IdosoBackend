@@ -31,22 +31,22 @@ public final class IdosoServiceImpl implements IdosoService {
         List<AnuncioDoUsuarioDTO> anunciosDto = new ArrayList<>();
 
         anunciosDoBanco.forEach(anuncio -> {
+            UsuarioEntity usuarioAtual = anuncio.getUsuario();
+
             AnuncioDoUsuarioDTO anuncioDto = AnuncioDoUsuarioDTO
                     .builder()
                     .id(anuncio.getId())
                     .foto("teste")
-                    .avaliacao(anuncio.getUsuario().getAvaliacao())
-                    .formado("TESTE")
-                    .curso("TESTE")
+                    .avaliacao(usuarioAtual.getAvaliacao())
+                    .formado(usuarioAtual.getFormado())
+                    .curso(usuarioAtual.getCurso())
                     .nomeIdoso(anuncio.getIdoso().getNome())
                     .valorHora(anuncio.getPagamentoBase().doubleValue())
-                    .whatsapp(anuncio.getUsuario().getCelular())
+                    .whatsapp(usuarioAtual.getCelular())
                     .build();
 
             anunciosDto.add(anuncioDto);
         });
-
-
 
         return HomeUsuarioDTO
                 .builder()
@@ -54,7 +54,6 @@ public final class IdosoServiceImpl implements IdosoService {
                 .avaliacao(usuario.getAvaliacao())
                 .biografia(usuario.getBiografia())
                 .foto(fileService.converteArquivoParaBytes(usuario.getFoto()))
-                .anuncios(anunciosDto)
                 .cidade(usuario.getEndereco().getCidade())
                 .build();
     }

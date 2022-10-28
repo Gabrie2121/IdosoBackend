@@ -56,7 +56,8 @@ public class AnuncioServiceImpl implements AnuncioService {
         all.forEach(anuncio -> {
             AnuncioCriadoDTO anuncioCriado = new AnuncioCriadoDTO();
             anuncioCriado.setId(anuncio.getId());
-            anuncioCriado.setNomeIdoso(anuncio.getIdoso().getNome());
+            IdosoEntity idoso = anuncio.getIdoso();
+            anuncioCriado.setNomeIdoso(idoso.getNome() + " " + idoso.getSobrenome());
             anuncios.add(anuncioCriado);
         });
 

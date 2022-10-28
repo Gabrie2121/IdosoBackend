@@ -30,7 +30,6 @@ public final class UsuarioEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToMany(fetch = EAGER)
     private List<ProfileEntity> profileEntities = new ArrayList<>();
     private String username;
@@ -75,6 +74,8 @@ public final class UsuarioEntity implements UserDetails {
 
     private Date dataCadastro;
 
+    private Boolean formado;
+
     @Enumerated(STRING)
     private CursoEnum curso;
     @PrePersist
@@ -86,8 +87,6 @@ public final class UsuarioEntity implements UserDetails {
         if(isNull(nomeFantasia)) nomeFantasia = EMPTY_CONTENT;
 
         if(isNull(ie)) ie = EMPTY_CONTENT;
-
-        if(isNull(curso)) curso = CursoEnum.PESSOA_FISICA;
     }
 
     private String email;

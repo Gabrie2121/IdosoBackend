@@ -6,21 +6,33 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
-public class AnuncioDoUsuarioDTO {
+public class CandidaturaAnuncioDTO {
 
-    private Long id;
+    private String fotoPrestador;
 
     private String foto;
+
+    private String nomePrestador;
+
+    private List<String> laudos;
+
+    private Boolean formado;
+
+    private String formacao;
+
+    private String biografiaPrestador;
+
+    private Long id;
 
     private Double avaliacao;
 
     private Double valorHora;
-
-    private Boolean formado;
 
     private CursoEnum curso;
 
