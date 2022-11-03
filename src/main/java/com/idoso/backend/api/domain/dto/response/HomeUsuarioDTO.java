@@ -1,5 +1,6 @@
 package com.idoso.backend.api.domain.dto.response;
 
+import com.idoso.backend.api.domain.dto.request.AnuncioPrestadorDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class HomeUsuarioDTO {
 
     private String biografia;
 
-    List<CandidaturaAnuncioDTO> candidaturas;
+    private List<AnuncioPrestadorDTO> anunciosAberto;
 
     private String nome;
 

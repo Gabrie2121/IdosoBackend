@@ -1,9 +1,12 @@
 package com.idoso.backend.api.domain.service;
 
+import com.idoso.backend.api.domain.dto.request.AnuncioPrestadorDTO;
 import com.idoso.backend.api.domain.dto.response.AnuncioDoUsuarioDTO;
 import com.idoso.backend.api.domain.dto.response.HomeUsuarioDTO;
 import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.entities.UsuarioEntity;
+import com.idoso.backend.api.domain.enuns.TipoPessoaEnum;
+import com.idoso.backend.api.domain.exception.UserNotFoundException;
 import com.idoso.backend.api.domain.repository.AnuncioRepository;
 import com.idoso.backend.api.domain.repository.UsuarioRepository;
 import com.idoso.backend.api.domain.service.contracts.IdosoService;
@@ -13,46 +16,47 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static com.idoso.backend.api.domain.enuns.TipoPessoaEnum.JURIDICA;
 
 @Service
 @RequiredArgsConstructor
 public final class IdosoServiceImpl implements IdosoService {
 
     private final UsuarioRepository usuarioRepository;
-
     private final FileService fileService;
 
-    private final AnuncioRepository anuncioRepository;
 
     @Override
     public HomeUsuarioDTO getHome(Long id) {
         UsuarioEntity usuario = usuarioRepository.findById(id).get();
-        List<AnuncioEntity> anunciosDoBanco = anuncioRepository.findByUsuarioId(usuario.getId());
-        List<AnuncioDoUsuarioDTO> anunciosDto = new ArrayList<>();
 
-        anunciosDoBanco.forEach(anuncio -> {
-            UsuarioEntity usuarioAtual = anuncio.getUsuario();
+        List<AnuncioPrestadorDTO> anunciosPrestadorAberto = new ArrayList<>();
 
-            AnuncioDoUsuarioDTO anuncioDto = AnuncioDoUsuarioDTO
+        List<UsuarioEntity> usuariosJuridica = usuarioRepository.buscarPorTipoPessoa(JURIDICA);
+
+        usuariosJuridica.forEach(u -> {
+            AnuncioPrestadorDTO anuncio = AnuncioPrestadorDTO
                     .builder()
-                    .id(anuncio.getId())
-                    .foto("teste")
-                    .avaliacao(usuarioAtual.getAvaliacao())
-                    .formado(usuarioAtual.getFormado())
-                    .curso(usuarioAtual.getCurso())
-                    .nomeIdoso(anuncio.getIdoso().getNome())
-                    .valorHora(anuncio.getPagamentoBase().doubleValue())
-                    .whatsapp(usuarioAtual.getCelular())
+                    .foto(u.getFoto())
+                    .formado(u.getFormado())
+                    .nomePrestador(u.getNome().concat(" ".concat(u.getSobrenome())))
+                    .whatsapp(u.getCelular())
+                    .ValorHora(u.getValoHora())
+                    .curso(u.getCurso())
+                    .avaliacao(u.getAvaliacao())
                     .build();
-
-            anunciosDto.add(anuncioDto);
+            anunciosPrestadorAberto.add(anuncio);
         });
+
 
         return HomeUsuarioDTO
                 .builder()
                 .nome(usuario.getNome())
                 .avaliacao(usuario.getAvaliacao())
                 .biografia(usuario.getBiografia())
+                .anunciosAberto(anunciosPrestadorAberto)
                 .foto(fileService.converteArquivoParaBytes(usuario.getFoto()))
                 .cidade(usuario.getEndereco().getCidade())
                 .build();

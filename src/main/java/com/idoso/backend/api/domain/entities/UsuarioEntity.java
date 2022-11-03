@@ -78,6 +78,9 @@ public final class UsuarioEntity implements UserDetails {
 
     @Enumerated(STRING)
     private CursoEnum curso;
+
+    private Double valoHora;
+
     @PrePersist
     public void setDataCadastro() {
         if (isNull(dataCadastro)) dataCadastro = new Date();
@@ -87,6 +90,8 @@ public final class UsuarioEntity implements UserDetails {
         if(isNull(nomeFantasia)) nomeFantasia = EMPTY_CONTENT;
 
         if(isNull(ie)) ie = EMPTY_CONTENT;
+
+        if(isNull(valoHora)) valoHora = 0.00;
     }
 
     private String email;
