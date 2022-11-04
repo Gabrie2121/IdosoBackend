@@ -1,9 +1,6 @@
 package com.idoso.backend.api.controller;
 
-import com.idoso.backend.api.domain.dto.response.CandidatoDTO;
-import com.idoso.backend.api.domain.dto.response.CandidaturaAceitaDTO;
-import com.idoso.backend.api.domain.dto.response.CandidaturaAnuncioDTO;
-import com.idoso.backend.api.domain.dto.response.HomeUsuarioDTO;
+import com.idoso.backend.api.domain.dto.response.*;
 import com.idoso.backend.api.domain.entities.CandidaturaEntity;
 import com.idoso.backend.api.domain.entities.IdosoEntity;
 import com.idoso.backend.api.domain.entities.UsuarioEntity;
@@ -142,6 +139,13 @@ public class UsuarioController {
     public ResponseEntity<?> getCandidatos(@PathVariable String anuncioId){
         List<CandidatoDTO> candidatos = idosoService.getListaCandidatos(Long.parseLong(anuncioId));
         return ResponseEntity.ok(candidatos);
+    }
+
+    @GetMapping("/getAceitas/{anuncioId}")
+    public ResponseEntity<?> getAceitas(@PathVariable String anuncioId){
+        List<AceitaDTO> aceitas = idosoService.getListaAceitas(Long.parseLong(anuncioId));
+
+        return ResponseEntity.ok(aceitas);
     }
 
 }

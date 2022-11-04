@@ -49,6 +49,9 @@ public final class UsuarioEntity implements UserDetails {
 
     private Date dataNasc;
 
+    @OneToMany(mappedBy = "usuario")
+    List<AnuncioEntity> anuncios;
+
     @JsonProperty("nDoc")
     private String nDoc;
     private String ie;
