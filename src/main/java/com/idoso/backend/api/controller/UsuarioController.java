@@ -1,5 +1,6 @@
 package com.idoso.backend.api.controller;
 
+import com.idoso.backend.api.domain.dto.response.CandidatoDTO;
 import com.idoso.backend.api.domain.dto.response.CandidaturaAceitaDTO;
 import com.idoso.backend.api.domain.dto.response.CandidaturaAnuncioDTO;
 import com.idoso.backend.api.domain.dto.response.HomeUsuarioDTO;
@@ -118,7 +119,6 @@ public class UsuarioController {
         CandidaturaEntity candidatura = candidaturaRepository.findById(Long.parseLong(candidaturaId)).get();
         candidaturaRepository.updateCandidatura(StatusCandidaturaEnum.ACEITA, candidatura.getId());
 
-
         List<CandidaturaEntity> candidaturasNaoAceitas = candidaturaRepository.candidaturasByAnuncio(candidatura.getAnuncio())
                 .stream()
                 .filter(c -> c.getId() != Long.parseLong(candidaturaId))
@@ -138,6 +138,11 @@ public class UsuarioController {
         return ResponseEntity.ok(retorno);
     }
 
+    @GetMapping("/getCandidatos/{anuncioId}")
+    public ResponseEntity<?> getCandidatos(@PathVariable String anuncioId){
+        List<CandidatoDTO> candidatos = idosoService.getListaCandidatos(Long.parseLong(anuncioId));
+        return ResponseEntity.ok(candidatos);
+    }
 
 }
 
