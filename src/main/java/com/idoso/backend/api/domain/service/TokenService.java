@@ -37,7 +37,7 @@ public class TokenService {
                 .compact();
 
 
-        return new String[]{token, Long.toString(user.getId())};
+        return new String[]{token, Long.toString(user.getId()), user.getTipoPessoa().name()};
     }
 
     public boolean isTokenValido(String token) {
