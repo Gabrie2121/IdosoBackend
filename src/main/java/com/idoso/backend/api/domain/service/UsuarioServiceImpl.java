@@ -1,6 +1,6 @@
 package com.idoso.backend.api.domain.service;
 
-import com.idoso.backend.api.domain.CandidaturaDTO;
+import com.idoso.backend.api.domain.dto.response.CandidaturaDTO;
 import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.entities.CandidaturaEntity;
 import com.idoso.backend.api.domain.entities.UsuarioEntity;

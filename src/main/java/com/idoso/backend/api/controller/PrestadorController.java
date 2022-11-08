@@ -1,6 +1,6 @@
 package com.idoso.backend.api.controller;
 
-import com.idoso.backend.api.domain.CandidaturaDTO;
+import com.idoso.backend.api.domain.dto.response.CandidaturaDTO;
 import com.idoso.backend.api.domain.service.contracts.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

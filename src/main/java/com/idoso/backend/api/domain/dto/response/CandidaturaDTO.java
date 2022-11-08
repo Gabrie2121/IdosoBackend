@@ -1,4 +1,4 @@
-package com.idoso.backend.api.domain;
+package com.idoso.backend.api.domain.dto.response;
 
 import com.idoso.backend.api.domain.entities.UsuarioEntity;
 import com.idoso.backend.api.domain.enuns.StatusCandidaturaEnum;
