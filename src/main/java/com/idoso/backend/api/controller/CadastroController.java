@@ -77,8 +77,9 @@ public class CadastroController {
                 count[0]++;
                 fileService.converteBytesParaArquivo(path, c);
             });
-
         }
+
+
 
         return usuarioRepository.save(usuario);
 

@@ -35,10 +35,13 @@ public class AnuncioControllerImpl implements AnuncioController {
     }
 
 
+
     @GetMapping("/all")
     public ResponseEntity<List<AnuncioCriadoDTO>> findAll() {
         return ResponseEntity.ok(service.findAll());
     }
+
+
 
 
 

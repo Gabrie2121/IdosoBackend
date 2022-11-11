@@ -1,5 +1,6 @@
 package com.idoso.backend.api.domain.dto.response;
 
+import com.idoso.backend.api.domain.enuns.PeriodoEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,5 +16,13 @@ public class AnuncioCriadoDTO {
 
     private String nomeIdoso;
 
+    private Double avaliacao;
 
+    private String fotoIdoso;
+
+    private Boolean isPcd;
+
+    private PeriodoEnum periodoEnum;
+
+    private Double valor;
 }
