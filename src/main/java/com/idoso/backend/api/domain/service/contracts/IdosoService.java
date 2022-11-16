@@ -15,4 +15,5 @@ public interface IdosoService {
     List<CandidatoDTO> getListaCandidatos(Long idAnuncio);
 
     List<AceitaDTO> getListaAceitas(Long parseLong);
+
 }

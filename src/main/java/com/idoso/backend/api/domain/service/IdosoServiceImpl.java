@@ -3,6 +3,7 @@ package com.idoso.backend.api.domain.service;
 import com.idoso.backend.api.domain.dto.request.AnuncioPrestadorDTO;
 import com.idoso.backend.api.domain.dto.response.AceitaDTO;
 import com.idoso.backend.api.domain.dto.response.CandidatoDTO;
+import com.idoso.backend.api.domain.dto.response.HomePrestadorDTO;
 import com.idoso.backend.api.domain.dto.response.HomeUsuarioDTO;
 import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.entities.CandidaturaEntity;
@@ -14,6 +15,7 @@ import com.idoso.backend.api.domain.repository.UsuarioRepository;
 import com.idoso.backend.api.domain.service.contracts.IdosoService;
 import com.idoso.backend.api.service.FileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

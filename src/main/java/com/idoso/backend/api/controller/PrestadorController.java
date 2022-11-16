@@ -2,6 +2,7 @@ package com.idoso.backend.api.controller;
 
 import com.idoso.backend.api.domain.dto.response.AnuncioCriadoDTO;
 import com.idoso.backend.api.domain.dto.response.CandidaturaDTO;
+import com.idoso.backend.api.domain.dto.response.HomePrestadorDTO;
 import com.idoso.backend.api.domain.repository.AnuncioRepository;
 import com.idoso.backend.api.domain.service.contracts.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class PrestadorController {
     private final UsuarioService usuarioService;
 
     private final AnuncioRepository anuncioRepository;
+
     @PostMapping("/candidatar")
     public ResponseEntity<?> candidatura(@RequestBody CandidaturaDTO dto) {
         return ResponseEntity.ok(usuarioService.novaCandidatura(dto));
@@ -48,5 +50,11 @@ public class PrestadorController {
         });
 
          return ResponseEntity.ok(retorno);
+    }
+
+    @GetMapping("/home/{idUsuario}")
+    public ResponseEntity<HomePrestadorDTO> getHomePrestador(@PathVariable String idUsuario) {
+        HomePrestadorDTO homeData = usuarioService.getHomePrestador(Long.parseLong(idUsuario));
+        return ResponseEntity.ok(homeData);
     }
 }
