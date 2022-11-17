@@ -2,6 +2,7 @@ package com.idoso.backend.api.controller;
 
 import com.idoso.backend.api.domain.dto.response.*;
 import com.idoso.backend.api.domain.entities.CandidaturaEntity;
+import com.idoso.backend.api.domain.entities.EnderecoEntity;
 import com.idoso.backend.api.domain.entities.IdosoEntity;
 import com.idoso.backend.api.domain.entities.UsuarioEntity;
 import com.idoso.backend.api.domain.enuns.StatusCandidaturaEnum;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +35,7 @@ public class UsuarioController {
 
     private final CandidaturaRepository candidaturaRepository;
 
+    private final PasswordEncoder encoder;
 
     @GetMapping("/all")
     public List<UsuarioEntity> getAll() {
@@ -51,11 +54,36 @@ public class UsuarioController {
     }
 
     @GetMapping("/getById/{idUsuario}")
-    public ResponseEntity<UsuarioEntity> getById(@PathVariable("idUsuario") String idUsuario) {
+    public ResponseEntity<UsuarioResponseDTO> getById(@PathVariable("idUsuario") String idUsuario) {
         UsuarioEntity usuario = usuarioRepository.findById(Long.parseLong(idUsuario))
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado id " + idUsuario));
 
-        return ResponseEntity.ok(usuario);
+
+        EnderecoEntity endereco = usuario.getEndereco();
+        UsuarioResponseDTO usuarioByIdDto = UsuarioResponseDTO
+                .builder()
+                .nome(usuario.getNome())
+                .sobrenome(usuario.getSobrenome())
+                .email(usuario.getEmail())
+                .senha(usuario.getPassword())
+                .nDoc(usuario.getNDoc())
+                .celular(usuario.getCelular())
+                .genero(usuario.getGenero())
+                .dataNasc(usuario.getDataNasc())
+                .tipoPessoa(usuario.getTipoPessoa())
+                .endereco(EnderecoDTO
+                        .builder()
+                        .id(endereco.getId())
+                        .cep(endereco.getCep())
+                        .logradouro(endereco.getLogradouro())
+                        .cidade(endereco.getCidade())
+                        .uf(endereco.getUf())
+                        .complemento(endereco.getComplemento())
+                        .principal(endereco.getPrincipal())
+                        .build())
+                .build();
+
+        return ResponseEntity.ok(usuarioByIdDto);
     }
 
     @PatchMapping("/atualizaBiografia")
