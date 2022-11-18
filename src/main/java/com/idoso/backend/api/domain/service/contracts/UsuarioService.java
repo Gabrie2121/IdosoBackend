@@ -5,7 +5,7 @@ import com.idoso.backend.api.domain.dto.response.CandidaturaDTO;
 import com.idoso.backend.api.domain.dto.response.HomePrestadorDTO;
 
 public interface UsuarioService {
-    CandidaturaDTO novaCandidatura(CandidaturaDTO dto);
+    CandidaturaDTO novaCandidatura(CandidaturaDTO dto, Long anuncioId);
 
     HomePrestadorDTO getHomePrestador(Long parseLong);
 }

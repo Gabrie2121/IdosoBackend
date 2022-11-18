@@ -22,9 +22,9 @@ public class PrestadorController {
 
     private final AnuncioRepository anuncioRepository;
 
-    @PostMapping("/candidatar")
-    public ResponseEntity<?> candidatura(@RequestBody CandidaturaDTO dto) {
-        return ResponseEntity.ok(usuarioService.novaCandidatura(dto));
+    @PostMapping("/candidatar/{anuncioId}")
+    public ResponseEntity<?> candidatura(@RequestBody CandidaturaDTO dto, @PathVariable String anuncioId) {
+        return ResponseEntity.ok(usuarioService.novaCandidatura(dto, Long.parseLong(anuncioId)));
     }
 
     @GetMapping("/anunciosCriados")

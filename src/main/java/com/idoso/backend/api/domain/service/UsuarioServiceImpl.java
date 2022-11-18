@@ -23,9 +23,9 @@ public final class UsuarioServiceImpl implements UsuarioService {
     private final CandidaturaRepository candidaturaRepository;
 
     @Override
-    public CandidaturaDTO novaCandidatura(CandidaturaDTO dto) {
+    public CandidaturaDTO novaCandidatura(CandidaturaDTO dto, Long anuncioId) {
         UsuarioEntity prestador = usuarioRepository.findById(dto.getPrestadorId()).get();
-        AnuncioEntity anuncio = anuncioRepository.findById(dto.getAnuncioId()).get();
+        AnuncioEntity anuncio = anuncioRepository.findById(anuncioId).get();
 
         CandidaturaEntity candidatura = candidaturaRepository.save(CandidaturaEntity
                 .builder()
