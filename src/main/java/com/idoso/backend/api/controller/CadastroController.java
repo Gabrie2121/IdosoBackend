@@ -22,11 +22,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+import javax.transaction.Transactional;
+
 
 @RestController
 @RequestMapping("/open")
 @RequiredArgsConstructor
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @Slf4j
 public class CadastroController {
 
@@ -129,5 +131,20 @@ public class CadastroController {
         }
 
         usuario.setProfileEntities(profiles);
+    }
+    @Transactional
+    @PutMapping("/atualizar/usuario")
+    public String atualizarUsuario(@RequestBody UsuarioEntity usuario) {  
+        
+        EnderecoEntity enderecoAux = usuario.getEndereco();
+        
+        enderecoRepository.atualizaEndereco(enderecoAux.getCep(),enderecoAux.getLogradouro(),enderecoAux.getCidade(),
+                            enderecoAux.getUf(),enderecoAux.getApelido(),enderecoAux.getPrincipal(),enderecoAux.getComplemento(),enderecoAux.getId());
+
+        usuarioRepository.updateUsuario(usuario.getNome(),usuario.getSobrenome(), usuario.getNDoc(), usuario.getCelular(), usuario.getDataNasc(),
+                                        usuario.getGenero(),usuario.getId());
+
+
+        return "Cadastro atualizado com sucesso!";
     }
 }
