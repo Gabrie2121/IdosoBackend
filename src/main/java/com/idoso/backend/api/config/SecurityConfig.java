@@ -20,6 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import static org.springframework.http.HttpMethod.POST;
 
+import java.util.List;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -62,7 +63,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, usuarioRepository), UsernamePasswordAuthenticationFilter.class);
 
         http.headers().frameOptions().sameOrigin();
-        http.cors().configurationSource(req -> new CorsConfiguration().applyPermitDefaultValues());
+
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedMethods(List.of("HEAD",
+            "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+
+        configuration.applyPermitDefaultValues();
+        http.cors().configurationSource(req -> configuration);
     }
 
 
