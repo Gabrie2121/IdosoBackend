@@ -60,6 +60,7 @@ public final class IdosoServiceImpl implements IdosoService {
 
         return HomeUsuarioDTO
                 .builder()
+                .id(usuario.getId())
                 .nome(usuario.getNome())
                 .avaliacao(usuario.getAvaliacao())
                 .biografia(usuario.getBiografia())

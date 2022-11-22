@@ -13,6 +13,8 @@ import java.util.List;
 @Builder
 public class HomeUsuarioDTO {
 
+    private Long id;
+
     private String foto;
 
     private Double avaliacao;

@@ -107,6 +107,7 @@ public class UsuarioController {
         return ResponseEntity.ok(homeData);
     }
 
+
     @GetMapping("/home/candidaturas/{idUsuario}")
     public ResponseEntity<List<CandidaturaAnuncioDTO>> getCandidaturas(@PathVariable String idUsuario) {
         UsuarioEntity usuario = usuarioRepository.findById(Long.parseLong(idUsuario)).get();
