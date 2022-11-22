@@ -30,6 +30,8 @@ public class CandidaturaAnuncioDTO {
 
     private Long id;
 
+    private Long idUsuario;
+
     private Double avaliacao;
 
     private Double valorHora;
@@ -39,4 +41,5 @@ public class CandidaturaAnuncioDTO {
     private String whatsapp;
 
     private String nomeIdoso;
+
 }

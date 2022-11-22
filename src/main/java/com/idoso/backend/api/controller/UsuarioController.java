@@ -121,6 +121,7 @@ public class UsuarioController {
             listaDTO.add(CandidaturaAnuncioDTO
                     .builder()
                             .id(c.getId())
+                            .idUsuario(Long.parseLong(idUsuario))
                             .biografiaPrestador(prestador.getBiografia())
                             .formacao(prestador.getCurso().name())
                             .curso(prestador.getCurso())
