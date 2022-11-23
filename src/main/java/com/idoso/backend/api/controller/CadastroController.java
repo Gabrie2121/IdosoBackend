@@ -41,8 +41,7 @@ public class CadastroController {
     private final ProfileRepository profileRepository;
 
     private final EnderecoRepository enderecoRepository;
-    @Value("${idoso.profileFolder}")
-    private String profileFolder;
+
 
     @PostMapping("/cadastro/usuario")
     public UsuarioEntity post(@Validated @RequestBody UsuarioEntity usuario) throws DocumentoNaoEncontradoException, ObjectNotFoundException, UsuarioExistenteException {
@@ -69,17 +68,17 @@ public class CadastroController {
 
         setProfiles(usuario);
 
-        if(usuario.getTipoPessoa() == TipoPessoaEnum.JURIDICA) {
-            String separador = getSeparator();
-            final int[] count = {1};
-
-            usuario.getCertificados().forEach(c -> {
-                String path = profileFolder + separador + usuario.getNDoc() + " certificado " +
-                        String.format("%04d", count[0])+".pdf";
-                count[0]++;
-                fileService.converteBytesParaArquivo(path, c);
-            });
-        }
+//        if(usuario.getTipoPessoa() == TipoPessoaEnum.JURIDICA) {
+//            String separador = getSeparator();
+//            final int[] count = {1};
+//
+//            usuario.getCertificados().forEach(c -> {
+//                String path = profileFolder + separador + usuario.getNDoc() + " certificado " +
+//                        String.format("%04d", count[0])+".pdf";
+//                count[0]++;
+//                fileService.converteBytesParaArquivo(path, c);
+//            });
+//        }
 
 
 
@@ -90,9 +89,9 @@ public class CadastroController {
     private void salvarFotoPerfil(UsuarioEntity usuario) {
         String temp = usuario.getFoto();
         String separator = getSeparator();
-        String path = profileFolder + separator + usuario.getNDoc() + "profile.jpg";
-        usuario.setFoto(path);
-        salvarFotoDePerfil(temp, path);
+//        String path = profileFolder + separator + usuario.getNDoc() + "profile.jpg";
+        usuario.setFoto("");
+//        salvarFotoDePerfil(temp, path);
     }
 
     private  String getSeparator() {
