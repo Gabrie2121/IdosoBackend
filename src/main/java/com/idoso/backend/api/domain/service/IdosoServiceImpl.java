@@ -65,7 +65,6 @@ public final class IdosoServiceImpl implements IdosoService {
                 .avaliacao(usuario.getAvaliacao())
                 .biografia(usuario.getBiografia())
                 .anunciosAberto(anunciosPrestadorAberto)
-                .foto(fileService.converteArquivoParaBytes(usuario.getFoto()))
                 .cidade(usuario.getEndereco().getCidade())
                 .build();
     }
