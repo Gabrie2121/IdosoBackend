@@ -108,11 +108,10 @@ public class UsuarioController {
     }
 
 
-    @GetMapping("/home/candidaturas/{idUsuario}")
-    public ResponseEntity<List<CandidaturaAnuncioDTO>> getCandidaturas(@PathVariable String idUsuario) {
-        UsuarioEntity usuario = usuarioRepository.findById(Long.parseLong(idUsuario)).get();
+    @GetMapping("/home/candidaturas/")
+    public ResponseEntity<List<CandidaturaAnuncioDTO>> getCandidaturas() {
 
-        List<CandidaturaEntity> candidaturas = candidaturaRepository.candidaturasByUser(usuario);
+        List<CandidaturaEntity> candidaturas = candidaturaRepository.findAll();
         List<CandidaturaAnuncioDTO> listaDTO = new ArrayList<>();
 
         candidaturas.forEach(c -> {
@@ -121,7 +120,7 @@ public class UsuarioController {
             listaDTO.add(CandidaturaAnuncioDTO
                     .builder()
                             .id(c.getId())
-                            .idUsuario(Long.parseLong(idUsuario))
+                            .idUsuario(c.getAnuncio().getUsuario().getId())
                             .biografiaPrestador(prestador.getBiografia())
                             .formacao(prestador.getCurso().name())
                             .curso(prestador.getCurso())
