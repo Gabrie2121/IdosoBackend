@@ -3,6 +3,7 @@ package com.idoso.backend.api.controller;
 import com.idoso.backend.api.domain.dto.response.AnuncioCriadoDTO;
 import com.idoso.backend.api.domain.dto.response.CandidaturaDTO;
 import com.idoso.backend.api.domain.dto.response.HomePrestadorDTO;
+import com.idoso.backend.api.domain.dto.response.IdsDTO;
 import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.entities.CandidaturaEntity;
 import com.idoso.backend.api.domain.repository.AnuncioRepository;
@@ -57,11 +58,20 @@ public class PrestadorController {
     }
 
     @GetMapping("/anuncioIds")
-    public ResponseEntity<List<Long>> getAllAnuncioIds() {
-       List<Long> ids = new ArrayList<>();
+    public ResponseEntity<List<IdsDTO>> getAllAnuncioIds() {
+       List<IdsDTO> ids = new ArrayList<>();
 
         List<AnuncioEntity> all = anuncioRepository.findAll();
-        all.forEach(c -> ids.add(c.getId()) );
+
+        for(int i = 1; i<= all.size(); i++) {
+            IdsDTO dto = IdsDTO
+                .builder()
+                .posicao(Long.valueOf(i))
+                .id(all.get(i).getId())
+                .build();
+
+            ids.add(dto);
+        }
 
 
         return ResponseEntity.ok(ids);
