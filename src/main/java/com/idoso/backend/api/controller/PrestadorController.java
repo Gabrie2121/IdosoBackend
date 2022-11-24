@@ -63,7 +63,7 @@ public class PrestadorController {
 
         List<AnuncioEntity> all = anuncioRepository.findAll();
 
-        for(int i = 1; i<= all.size(); i++) {
+        for(int i = 0; i<= all.size(); i++) {
             IdsDTO dto = IdsDTO
                 .builder()
                 .posicao(Long.valueOf(i))
