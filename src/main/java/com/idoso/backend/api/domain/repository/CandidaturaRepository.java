@@ -23,4 +23,7 @@ public interface CandidaturaRepository extends JpaRepository<CandidaturaEntity, 
     @Modifying
     @Query("UPDATE CandidaturaEntity set status = :status WHERE id = :candidaturaId")
     void updateCandidatura(StatusCandidaturaEnum status, Long candidaturaId);
+
+    @Query("SELECT c FROM CandidaturaEntity c WHERE c.prestador = ?1")
+    List<CandidaturaEntity> candidaturasDoPrestador(UsuarioEntity prestador);
 }

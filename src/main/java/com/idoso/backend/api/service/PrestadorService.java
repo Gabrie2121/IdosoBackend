@@ -6,6 +6,7 @@ import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.entities.CandidaturaEntity;
 import com.idoso.backend.api.domain.entities.UsuarioEntity;
 import com.idoso.backend.api.domain.enuns.StatusCandidaturaEnum;
+import com.idoso.backend.api.domain.repository.CandidaturaRepository;
 import com.idoso.backend.api.domain.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,19 +20,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PrestadorService {
 
-    private UsuarioRepository usuarioRepository;
+    private final CandidaturaRepository candidaturaRepository;
+    private final UsuarioRepository usuarioRepository;
     public List<AceitaPrestadorDTO> getListaAceitas(Long usuarioiD) {
-        List<AnuncioEntity> anunciosDoUsuario = usuarioRepository.findById(usuarioiD).get().getAnuncios();
 
-        List<CandidaturaEntity> candidaturas = new ArrayList<>();
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioiD).get();
 
-        anunciosDoUsuario.stream().filter(anuncio -> !anuncio.getCandidaturas().isEmpty()).collect(Collectors.toList()).forEach(anuncio -> {
-            candidaturas.addAll(anuncio.getCandidaturas());
-        });
+        List<CandidaturaEntity> minhasCandidaturas = candidaturaRepository.candidaturasDoPrestador(usuario);
 
         List<AceitaPrestadorDTO> aceitos = new ArrayList<>();
 
-        candidaturas.stream()
+        minhasCandidaturas.stream()
                 .filter(c -> c.getStatus() == StatusCandidaturaEnum.ACEITA)
                 .forEach(c -> {
                     UsuarioEntity idoso = c.getAnuncio().getUsuario();
