@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AnuncioPrestadorDTO {
+    private Long idPrestador;
 
     private String foto;
 

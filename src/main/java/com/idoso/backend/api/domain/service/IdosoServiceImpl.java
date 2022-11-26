@@ -47,12 +47,14 @@ public final class IdosoServiceImpl implements IdosoService {
         usuariosJuridica.forEach(u -> {
             AnuncioPrestadorDTO anuncio = AnuncioPrestadorDTO
                     .builder()
+                    .idPrestador(u.getId())
                     .foto(u.getFoto())
                     .formado(u.getFormado())
                     .nomePrestador(u.getNome().concat(" ".concat(u.getSobrenome())))
                     .whatsapp(u.getCelular())
                     .ValorHora(u.getValoHora())
                     .curso(u.getCurso())
+
                     .avaliacao(u.getAvaliacao())
                     .build();
             anunciosPrestadorAberto.add(anuncio);
