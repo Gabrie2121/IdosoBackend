@@ -1,2 +1,0 @@
-INSERT INTO tb_profiles(id, nome) VALUES (1, 'ROLE_IDOSO') RETURNING *;
-INSERT INTO tb_profiles(id, nome) VALUES (2, 'ROLE_PRESTADOR') RETURNING *;
