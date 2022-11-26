@@ -3,6 +3,8 @@ package com.idoso.backend.api.controller;
 import com.idoso.backend.api.domain.dto.response.AnuncioCriadoDTO;
 import com.idoso.backend.api.domain.dto.response.CandidaturaDTO;
 import com.idoso.backend.api.domain.dto.response.HomePrestadorDTO;
+import com.idoso.backend.api.domain.dto.response.IdsDTO;
+import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.repository.AnuncioRepository;
 import com.idoso.backend.api.domain.service.contracts.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ public class PrestadorController {
     private final UsuarioService usuarioService;
 
     private final AnuncioRepository anuncioRepository;
+
 
     @PostMapping("/candidatar/{anuncioId}")
     public ResponseEntity<?> candidatura(@RequestBody CandidaturaDTO dto, @PathVariable String anuncioId) {
@@ -50,6 +53,28 @@ public class PrestadorController {
         });
 
          return ResponseEntity.ok(retorno);
+    }
+
+    @GetMapping("/anuncioIds")
+    public ResponseEntity<List<IdsDTO>> getAllAnuncioIds() {
+       List<IdsDTO> ids = new ArrayList<>();
+
+        List<AnuncioEntity> all = anuncioRepository.findAll();
+
+        for(int i = 0; i< all.size(); i++) {
+            long posicao = i + 1;
+
+            IdsDTO dto = IdsDTO
+                .builder()
+                .posicao(posicao)
+                .id(all.get(i).getId())
+                .build();
+
+            ids.add(dto);
+        }
+
+
+        return ResponseEntity.ok(ids);
     }
 
     @GetMapping("/home/{idUsuario}")

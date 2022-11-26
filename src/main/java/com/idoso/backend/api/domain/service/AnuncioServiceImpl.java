@@ -35,8 +35,7 @@ public class AnuncioServiceImpl implements AnuncioService {
 
     private final FileService fileService;
 
-    @Value("${idoso.anuncioFolder}")
-    private String anunciosFolder;
+
 
 
     @Override
@@ -102,20 +101,20 @@ public class AnuncioServiceImpl implements AnuncioService {
         String osName = System.getProperty("os.name");
         String separator = osName.contains("Windows") ? "\\" : "/";
 
-        //Atualiza o anuncio no banco com o path da foto
-        String fotoPath = anunciosFolder + separator + "FIA"+ String.format("%05d" , anuncioSalvo.getId())+".jpg";
+//        //Atualiza o anuncio no banco com o path da foto
+//        String fotoPath = anunciosFolder + separator + "FIA"+ String.format("%05d" , anuncioSalvo.getId())+".jpg";
+//
+//        //Salva a foto do idoso no diretório de anuncios
+//        fileService.converteBytesParaArquivo(fotoPath, temp);
+//
+//        int count = 1;
+//        Iterator<Laudo> iterator = laudosTemp.iterator();
 
-        //Salva a foto do idoso no diretório de anuncios
-        fileService.converteBytesParaArquivo(fotoPath, temp);
-
-        int count = 1;
-        Iterator<Laudo> iterator = laudosTemp.iterator();
-
-        while(iterator.hasNext()){
-            Laudo laudo = iterator.next();
-            String novoPath = anunciosFolder + separator + "L"+ String.format("%05d" , count) + "A"+String.format("%05d", anuncioSalvo.getId())+".jpg";
-            fileService.converteBytesParaArquivo(novoPath, laudo.getData());
-        }
+//        while(iterator.hasNext()){
+//            Laudo laudo = iterator.next();
+//            String novoPath = anunciosFolder + separator + "L"+ String.format("%05d" , count) + "A"+String.format("%05d", anuncioSalvo.getId())+".jpg";
+//            fileService.converteBytesParaArquivo(novoPath, laudo.getData());
+//        }
 
         return anuncioSalvo;
     }

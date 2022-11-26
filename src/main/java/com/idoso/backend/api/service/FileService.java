@@ -13,28 +13,13 @@ import java.util.Base64;
 public class FileService {
 
     public String converteBytesParaArquivo(String path, String bytes) {
-
-        byte[] decodedBytes = Base64.getDecoder().decode(bytes);
-        try {
-            FileUtils.writeByteArrayToFile(new File(path), decodedBytes);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return path;
+        return "";
 
    }
 
 
    public String converteArquivoParaBytes(String pathToFile) {
-        byte[] fileContent = new byte[0];
-
-        try {
-            fileContent = FileUtils.readFileToByteArray(new File(pathToFile));
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return Base64.getEncoder().encodeToString(fileContent);
+        return "";
 
     }
 

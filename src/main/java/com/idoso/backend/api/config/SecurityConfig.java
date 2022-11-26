@@ -20,6 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import static org.springframework.http.HttpMethod.POST;
 
+import java.util.Arrays;
 import java.util.List;
 @Configuration
 @EnableWebSecurity
@@ -65,8 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().sameOrigin();
 
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedMethods(List.of("HEAD",
-            "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("HEAD",
+                "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
 
         configuration.applyPermitDefaultValues();
         http.cors().configurationSource(req -> configuration);
