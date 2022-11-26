@@ -19,8 +19,8 @@ public class Massa {
 
     @EventListener
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        createProfile("ROLE_PRESTADOR");
-        createProfile("ROLE_IDOSO");
+        // createProfile("ROLE_PRESTADOR");
+        // createProfile("ROLE_IDOSO");
     }
     private ProfileEntity createProfile(String role) {
         ProfileEntity admin = new ProfileEntity();
