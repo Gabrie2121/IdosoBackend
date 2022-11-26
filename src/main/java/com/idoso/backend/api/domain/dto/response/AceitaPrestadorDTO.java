@@ -25,4 +25,6 @@ public class AceitaPrestadorDTO {
     private String nome;
 
     private Double valorHora;
+
+    private String nomeIdoso;
 }

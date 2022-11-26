@@ -4,6 +4,7 @@ import com.idoso.backend.api.domain.dto.response.AceitaDTO;
 import com.idoso.backend.api.domain.dto.response.AceitaPrestadorDTO;
 import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.entities.CandidaturaEntity;
+import com.idoso.backend.api.domain.entities.IdosoEntity;
 import com.idoso.backend.api.domain.entities.UsuarioEntity;
 import com.idoso.backend.api.domain.enuns.StatusCandidaturaEnum;
 import com.idoso.backend.api.domain.repository.CandidaturaRepository;
@@ -24,25 +25,28 @@ public class PrestadorService {
     private final UsuarioRepository usuarioRepository;
     public List<AceitaPrestadorDTO> getListaAceitas(Long usuarioiD) {
 
-        UsuarioEntity usuario = usuarioRepository.findById(usuarioiD).get();
+        UsuarioEntity prestador = usuarioRepository.findById(usuarioiD).get();
 
-        List<CandidaturaEntity> minhasCandidaturas = candidaturaRepository.candidaturasDoPrestador(usuario);
+        List<CandidaturaEntity> minhasCandidaturas = candidaturaRepository.candidaturasDoPrestador(prestador);
 
         List<AceitaPrestadorDTO> aceitos = new ArrayList<>();
 
         minhasCandidaturas.stream()
                 .filter(c -> c.getStatus() == StatusCandidaturaEnum.ACEITA)
                 .forEach(c -> {
-                    UsuarioEntity idoso = c.getAnuncio().getUsuario();
+                    IdosoEntity idoso = c.getAnuncio().getIdoso();
+
+                    UsuarioEntity usuario = c.getAnuncio().getUsuario();
 
                     AceitaPrestadorDTO aceita = AceitaPrestadorDTO
                             .builder()
-                            .fotoIdoso(idoso.getFoto())
-                            .valorHora(idoso.getValoHora())
-                            .cidade(idoso.getEndereco().getCidade())
-                            .nome(idoso.getNome().concat(" ".concat(idoso.getSobrenome())))
-                            .avaliacao(idoso.getAvaliacao())
-                            .biografia(idoso.getBiografia())
+                            .fotoIdoso("FotoIdoso")
+                            .valorHora(c.getAnuncio().getPagamentoBase().doubleValue())
+                            .cidade(usuario.getEndereco().getCidade())
+                            .nome(usuario.getNome() + " " + usuario.getSobrenome())
+                            .avaliacao(usuario.getAvaliacao())
+                            .biografia(usuario.getBiografia())
+                            .nomeIdoso(idoso.getNome() + " " + idoso.getSobrenome())
                             .build();
 
                     aceitos.add(aceita);
