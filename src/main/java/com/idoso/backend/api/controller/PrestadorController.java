@@ -1,12 +1,10 @@
 package com.idoso.backend.api.controller;
 
-import com.idoso.backend.api.domain.dto.response.AnuncioCriadoDTO;
-import com.idoso.backend.api.domain.dto.response.CandidaturaDTO;
-import com.idoso.backend.api.domain.dto.response.HomePrestadorDTO;
-import com.idoso.backend.api.domain.dto.response.IdsDTO;
+import com.idoso.backend.api.domain.dto.response.*;
 import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.repository.AnuncioRepository;
 import com.idoso.backend.api.domain.service.contracts.UsuarioService;
+import com.idoso.backend.api.service.PrestadorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +21,8 @@ public class PrestadorController {
     private final UsuarioService usuarioService;
 
     private final AnuncioRepository anuncioRepository;
+
+    private final PrestadorService prestadorService;
 
 
     @PostMapping("/candidatar/{anuncioId}")
@@ -81,5 +81,12 @@ public class PrestadorController {
     public ResponseEntity<HomePrestadorDTO> getHomePrestador(@PathVariable String idUsuario) {
         HomePrestadorDTO homeData = usuarioService.getHomePrestador(Long.parseLong(idUsuario));
         return ResponseEntity.ok(homeData);
+    }
+
+    @GetMapping("/getAceitas/{usuarioId}")
+    public ResponseEntity<?> getAceitas(@PathVariable String usuarioId){
+        List<AceitaPrestadorDTO> aceitas = prestadorService.getListaAceitas(Long.parseLong(usuarioId));
+
+        return ResponseEntity.ok(aceitas);
     }
 }
