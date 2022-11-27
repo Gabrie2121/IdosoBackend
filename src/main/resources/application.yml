@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: live
   application:
     name: Idoso-API
 
