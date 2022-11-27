@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -26,4 +27,7 @@ public interface CandidaturaRepository extends JpaRepository<CandidaturaEntity, 
 
     @Query("SELECT c FROM CandidaturaEntity c WHERE c.prestador = ?1")
     List<CandidaturaEntity> candidaturasDoPrestador(UsuarioEntity prestador);
+
+    @Query("SELECT c FROM CandidaturaEntity c WHERE c.anuncio.dtFim < :today")
+    List<CandidaturaEntity> candidaturasVencidas(LocalDate today);
 }

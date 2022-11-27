@@ -1,5 +1,6 @@
 package com.idoso.backend.api.domain.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.idoso.backend.api.domain.entities.IdosoEntity;
 import com.idoso.backend.api.domain.entities.UsuarioEntity;
 import com.idoso.backend.api.domain.enuns.FrequenciaEnum;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -33,6 +35,12 @@ public class AnuncioUsuarioDTO {
     private String descricao;
 
     private FrequenciaEnum frequencia;
+
+    @JsonProperty(value = "dInicio")
+    private Date dInicio;
+
+    @JsonProperty(value = "dFim")
+    private Date dFim;
 
     private String horaInicio;
 

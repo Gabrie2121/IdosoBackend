@@ -2,16 +2,20 @@ package com.idoso.backend.api.service;
 
 import com.idoso.backend.api.domain.dto.response.AceitaDTO;
 import com.idoso.backend.api.domain.dto.response.AceitaPrestadorDTO;
+import com.idoso.backend.api.domain.dto.response.HistoricoTrabalhosDTO;
 import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.entities.CandidaturaEntity;
 import com.idoso.backend.api.domain.entities.IdosoEntity;
 import com.idoso.backend.api.domain.entities.UsuarioEntity;
 import com.idoso.backend.api.domain.enuns.StatusCandidaturaEnum;
+import com.idoso.backend.api.domain.enuns.TipoPessoaEnum;
 import com.idoso.backend.api.domain.repository.CandidaturaRepository;
 import com.idoso.backend.api.domain.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,5 +58,34 @@ public class PrestadorService {
                 });
 
         return aceitos;
+    }
+
+    public List<HistoricoTrabalhosDTO> getHistoricoContratos(String usuarioId) {
+        UsuarioEntity prestador = usuarioRepository.findById(Long.parseLong(usuarioId)).get();
+
+        List<HistoricoTrabalhosDTO> listaTrabalhos = new ArrayList<>();
+
+        List<CandidaturaEntity> candidaturasVencidas = candidaturaRepository.candidaturasVencidas(LocalDate.now());
+
+        candidaturasVencidas.forEach(c -> {
+            UsuarioEntity parente = c.getAnuncio().getUsuario();
+            HistoricoTrabalhosDTO trabalho = HistoricoTrabalhosDTO
+                    .builder()
+                    .fotoIdoso("Foto do Iodos")
+                    .avaliacao(parente.getAvaliacao())
+                    .nomeParente(parente.getTipoPessoa() == TipoPessoaEnum.FISICA ? parente.getNome() + " " + parente.getSobrenome() : parente.getNomeFantasia())
+                    .horaInicio(c.getAnuncio().getHoraInicio())
+                    .horaFim(c.getAnuncio().getHoraFim())
+                    .nomeIdoso(c.getAnuncio().getIdoso().getNome() + " " + c.getAnuncio().getIdoso().getSobrenome())
+                    .valorHora(parente.getValoHora())
+                    .build();
+
+        listaTrabalhos.add(trabalho);
+
+        });
+
+
+        return listaTrabalhos;
+
     }
 }

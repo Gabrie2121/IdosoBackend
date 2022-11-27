@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,7 +59,7 @@ public final class AnuncioEntity {
     @OneToMany(mappedBy = "anuncio")
     private List<CandidaturaEntity> candidaturas;
 
-    private String dInicio;
+    private LocalDate dtInicio;
 
-    private String dFim;
+    private LocalDate dtFim;
 }

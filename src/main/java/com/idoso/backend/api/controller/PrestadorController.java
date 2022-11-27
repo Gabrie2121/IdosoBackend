@@ -89,4 +89,9 @@ public class PrestadorController {
 
         return ResponseEntity.ok(aceitas);
     }
+
+    @GetMapping("/historico/{usuarioId}")
+    public ResponseEntity<List<HistoricoTrabalhosDTO>> getHistoricoTrabalhos(@PathVariable String usuarioId) {
+        return ResponseEntity.ok(prestadorService.getHistoricoContratos(usuarioId));
+    }
 }

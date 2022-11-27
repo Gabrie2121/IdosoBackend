@@ -1,9 +1,7 @@
 package com.idoso.backend.api.domain.service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.time.*;
+import java.util.*;
 
 import com.idoso.backend.api.domain.dto.request.AnuncioUsuarioDTO;
 import com.idoso.backend.api.domain.dto.request.Laudo;
@@ -81,6 +79,16 @@ public class AnuncioServiceImpl implements AnuncioService {
 
         List<Laudo> laudosTemp = dto.getLaudos();
 
+        Date dtInicio = dto.getDInicio();
+        Instant instant = dtInicio.toInstant();
+        ZonedDateTime zdt = instant.atZone(ZoneId.systemDefault());
+        LocalDate dateInicio = zdt.toLocalDate();
+
+        Date dtFim = dto.getDFim();
+        Instant instant2 = dtFim.toInstant();
+        ZonedDateTime zdt2 = instant2.atZone(ZoneId.systemDefault());
+        LocalDate dateFim = zdt2.toLocalDate();
+
         AnuncioEntity anuncioASerSalvo = AnuncioEntity
                 .builder()
                 .descricao(dto.getDescricao())
@@ -88,6 +96,8 @@ public class AnuncioServiceImpl implements AnuncioService {
                 .idoso(dto.getIdoso())
                 .periodo(dto.getPeriodo())
                 .frequencia(dto.getFrequencia())
+                .dtInicio(dateInicio)
+                .dtFim(dateFim)
                 .pagamentoBase(dto.getPagamentoBase())
                 .horaInicio(dto.getHoraInicio())
                 .horaFim(dto.getHoraFim())
