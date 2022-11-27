@@ -43,5 +43,4 @@ public class CandidaturaAnuncioDTO {
     private String whatsapp;
 
     private String nomeIdoso;
-
 }

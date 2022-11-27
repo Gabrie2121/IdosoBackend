@@ -56,7 +56,7 @@ public final class AnuncioEntity {
     @OneToMany(mappedBy = "anuncio")
     private List<CandidaturaEntity> candidaturas;
 
-    private Date dInicio;
+    private String dInicio;
 
-    private Date dFim;
+    private String dFim;
 }
