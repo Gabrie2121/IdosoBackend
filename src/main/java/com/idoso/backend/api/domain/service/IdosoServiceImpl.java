@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,22 +43,24 @@ public final class IdosoServiceImpl implements IdosoService {
 
         List<UsuarioEntity> usuariosJuridica = usuarioRepository.buscarPorTipoPessoa(JURIDICA);
 
-        usuariosJuridica.forEach(u -> {
-            AnuncioPrestadorDTO anuncio = AnuncioPrestadorDTO
-                    .builder()
-                    .idPrestador(u.getId())
-                    .foto(u.getFoto())
-                    .formado(u.getFormado())
-                    .nomePrestador(u.getNome().concat(" ".concat(u.getSobrenome())))
-                    .whatsapp(u.getCelular())
-                    .ValorHora(u.getValoHora())
-                    .curso(u.getCurso())
 
-                    .avaliacao(u.getAvaliacao())
-                    .build();
+        AnuncioPrestadorDTO anuncio = new AnuncioPrestadorDTO();
+
+        Iterator<UsuarioEntity> iterator = usuariosJuridica.iterator();
+        while(iterator.hasNext()) {
+            UsuarioEntity next = iterator.next();
+            anuncio.setFoto(next.getFoto());
+            anuncio.setIdPrestador(next.getId());
+            anuncio.setFormado(next.getFormado());
+            anuncio.setNomePrestador(next.getNomeFantasia());
+            anuncio.setWhatsapp(next.getCelular());
+            anuncio.setValorHora(next.getValoHora());
+            anuncio.setCurso(next.getCurso());
+            anuncio.setAvaliacao(next.getAvaliacao());
+
             anunciosPrestadorAberto.add(anuncio);
-        });
 
+        }
         return HomeUsuarioDTO
                 .builder()
                 .id(usuario.getId())

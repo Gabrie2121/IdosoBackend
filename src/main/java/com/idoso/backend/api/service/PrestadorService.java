@@ -47,7 +47,8 @@ public class PrestadorService {
                             .avaliacao(usuario.getAvaliacao())
                             .biografia(usuario.getBiografia())
                             .nomeIdoso(idoso.getNome() + " " + idoso.getSobrenome())
-                            .build();
+                            .build()
+                            ;
 
                     aceitos.add(aceita);
                 });

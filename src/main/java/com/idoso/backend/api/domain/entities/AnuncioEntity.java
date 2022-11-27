@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static javax.persistence.EnumType.STRING;
@@ -31,7 +32,6 @@ public final class AnuncioEntity {
 
     @OneToOne
     private IdosoEntity idoso;
-
     @ManyToOne
     private UsuarioEntity usuario;
 
@@ -55,4 +55,8 @@ public final class AnuncioEntity {
 
     @OneToMany(mappedBy = "anuncio")
     private List<CandidaturaEntity> candidaturas;
+
+    private Date dInicio;
+
+    private Date dFim;
 }
