@@ -166,7 +166,7 @@ public final class IdosoServiceImpl implements IdosoService {
                     .nomeIdoso(a.getIdoso().getNome() + " " + a.getIdoso().getSobrenome())
                     .horaInicio(a.getHoraInicio())
                     .horaFim(a.getHoraFim())
-                    .valorHora(a.getUsuario().getValoHora())
+                    .valorHora(a.getPagamentoBase().doubleValue())
                     .dtFim(a.getDtFim())
                     .nomePrestador(nomePrestador)
                     .avaliacao(a.getUsuario().getAvaliacao())

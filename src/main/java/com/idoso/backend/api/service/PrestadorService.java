@@ -72,7 +72,7 @@ public class PrestadorService {
                     .horaInicio(c.getAnuncio().getHoraInicio())
                     .horaFim(c.getAnuncio().getHoraFim())
                     .nomeIdoso(c.getAnuncio().getIdoso().getNome() + " " + c.getAnuncio().getIdoso().getSobrenome())
-                    .valorHora(parente.getValoHora())
+                    .valorHora(c.getAnuncio().getPagamentoBase().doubleValue())
                     .dataFim(c.getAnuncio().getDtFim())
                     .build();
 
