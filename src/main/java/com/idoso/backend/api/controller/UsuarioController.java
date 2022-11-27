@@ -178,5 +178,10 @@ public class UsuarioController {
         return ResponseEntity.ok(aceitas);
     }
 
+    @GetMapping("/historico/{usuarioId}")
+    public ResponseEntity<List<HistoricoContratosDTO>> getHistoricoContratosRealizados(@PathVariable String usuarioId) {
+        return ResponseEntity.ok(idosoService.getListaContratosRealizados(Long.parseLong(usuarioId)));
+    }
+
 }
 

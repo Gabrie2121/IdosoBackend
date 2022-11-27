@@ -28,6 +28,8 @@ public interface CandidaturaRepository extends JpaRepository<CandidaturaEntity, 
     @Query("SELECT c FROM CandidaturaEntity c WHERE c.prestador = ?1")
     List<CandidaturaEntity> candidaturasDoPrestador(UsuarioEntity prestador);
 
-    @Query("SELECT c FROM CandidaturaEntity c WHERE c.anuncio.dtFim < :today")
-    List<CandidaturaEntity> candidaturasVencidas(LocalDate today);
+    @Query("SELECT c FROM CandidaturaEntity c WHERE c.anuncio.dtFim < :today AND c.prestador = :prestador")
+    List<CandidaturaEntity> candidaturasVencidas(LocalDate today, UsuarioEntity prestador);
+
+
 }

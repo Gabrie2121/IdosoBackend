@@ -1,9 +1,7 @@
 package com.idoso.backend.api.service;
 
-import com.idoso.backend.api.domain.dto.response.AceitaDTO;
 import com.idoso.backend.api.domain.dto.response.AceitaPrestadorDTO;
 import com.idoso.backend.api.domain.dto.response.HistoricoTrabalhosDTO;
-import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.entities.CandidaturaEntity;
 import com.idoso.backend.api.domain.entities.IdosoEntity;
 import com.idoso.backend.api.domain.entities.UsuarioEntity;
@@ -15,11 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -65,19 +60,20 @@ public class PrestadorService {
 
         List<HistoricoTrabalhosDTO> listaTrabalhos = new ArrayList<>();
 
-        List<CandidaturaEntity> candidaturasVencidas = candidaturaRepository.candidaturasVencidas(LocalDate.now());
+        List<CandidaturaEntity> candidaturasVencidas = candidaturaRepository.candidaturasVencidas(LocalDate.now(), prestador);
 
         candidaturasVencidas.forEach(c -> {
             UsuarioEntity parente = c.getAnuncio().getUsuario();
             HistoricoTrabalhosDTO trabalho = HistoricoTrabalhosDTO
                     .builder()
-                    .fotoIdoso("Foto do Iodos")
+                    .fotoIdoso("Foto do Idoso")
                     .avaliacao(parente.getAvaliacao())
                     .nomeParente(parente.getTipoPessoa() == TipoPessoaEnum.FISICA ? parente.getNome() + " " + parente.getSobrenome() : parente.getNomeFantasia())
                     .horaInicio(c.getAnuncio().getHoraInicio())
                     .horaFim(c.getAnuncio().getHoraFim())
                     .nomeIdoso(c.getAnuncio().getIdoso().getNome() + " " + c.getAnuncio().getIdoso().getSobrenome())
                     .valorHora(parente.getValoHora())
+                    .dataFim(c.getAnuncio().getDtFim())
                     .build();
 
         listaTrabalhos.add(trabalho);

@@ -7,23 +7,23 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Data
 @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HistoricoTrabalhosDTO {
+public class HistoricoContratosDTO {
 
-    private String fotoIdoso;
+    private String fotoPrestador;
 
-    private Double avaliacao;
+    private String nomePrestador;
 
-    private LocalDate dataFim;
+    private LocalDate dtFim;
 
     private String horaInicio;
 
     private String horaFim;
 
-    private String nomeParente;
+    private Double avaliacao;
 
     private String nomeIdoso;
 

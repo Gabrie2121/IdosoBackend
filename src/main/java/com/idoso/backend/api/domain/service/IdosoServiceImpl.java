@@ -3,6 +3,7 @@ package com.idoso.backend.api.domain.service;
 import com.idoso.backend.api.domain.dto.request.AnuncioPrestadorDTO;
 import com.idoso.backend.api.domain.dto.response.AceitaDTO;
 import com.idoso.backend.api.domain.dto.response.CandidatoDTO;
+import com.idoso.backend.api.domain.dto.response.HistoricoContratosDTO;
 import com.idoso.backend.api.domain.dto.response.HomeUsuarioDTO;
 import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.entities.CandidaturaEntity;
@@ -14,12 +15,12 @@ import com.idoso.backend.api.domain.repository.UsuarioRepository;
 import com.idoso.backend.api.domain.service.contracts.IdosoService;
 import com.idoso.backend.api.service.FileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.idoso.backend.api.domain.enuns.TipoPessoaEnum.JURIDICA;
@@ -47,7 +48,7 @@ public final class IdosoServiceImpl implements IdosoService {
         AnuncioPrestadorDTO anuncio = new AnuncioPrestadorDTO();
 
         Iterator<UsuarioEntity> iterator = usuariosJuridica.iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             UsuarioEntity next = iterator.next();
             anuncio.setFoto(next.getFoto());
             anuncio.setIdPrestador(next.getId());
@@ -136,5 +137,45 @@ public final class IdosoServiceImpl implements IdosoService {
                 });
 
         return aceitos;
+    }
+
+    @Override
+    public List<HistoricoContratosDTO> getListaContratosRealizados(Long usuarioId) {
+        UsuarioEntity parente = usuarioRepository.findById(usuarioId).orElseThrow(() -> throw new UsernameNotFoundException(("Usuário não encontrado")));
+        List<HistoricoContratosDTO> contratosVencidos = new ArrayList<>();
+
+        List<AnuncioEntity> anuncios = anuncioRepository.anunciosVencidos(LocalDate.now(), parente);
+
+
+        anuncios.forEach(a -> {
+            HistoricoContratosDTO historico = null;
+            List<CandidaturaEntity> aceitas = a.getCandidaturas().stream().filter(c-> c.getStatus() == StatusCandidaturaEnum.ACEITA).collect(Collectors.toList());
+            String nomePrestador;
+
+            if(aceitas.isEmpty()) {
+                nomePrestador = "Não há prestadores para este anuncio";
+            } else {
+                int size = aceitas.size();
+                nomePrestador = aceitas.get(size -1).getPrestador().getNomeFantasia();
+
+
+            }
+            historico = HistoricoContratosDTO
+                    .builder()
+                    .fotoPrestador("Foto Prestador")
+                    .nomeIdoso(a.getIdoso().getNome() + " " + a.getIdoso().getSobrenome())
+                    .horaInicio(a.getHoraInicio())
+                    .horaFim(a.getHoraFim())
+                    .valorHora(a.getUsuario().getValoHora())
+                    .dtFim(a.getDtFim())
+                    .nomePrestador(nomePrestador)
+                    .avaliacao(a.getUsuario().getAvaliacao())
+                    .build();
+
+            contratosVencidos.add(historico);
+        });
+
+
+        return contratosVencidos;
     }
 }
