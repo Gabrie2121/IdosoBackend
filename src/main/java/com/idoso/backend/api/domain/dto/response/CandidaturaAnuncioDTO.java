@@ -14,6 +14,8 @@ import java.util.List;
 @Builder
 public class CandidaturaAnuncioDTO {
 
+    private Long anuncioId;
+
     private String fotoPrestador;
 
     private String foto;
