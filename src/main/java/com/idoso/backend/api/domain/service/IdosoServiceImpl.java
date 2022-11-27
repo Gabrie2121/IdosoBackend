@@ -44,7 +44,6 @@ public final class IdosoServiceImpl implements IdosoService {
 
         List<UsuarioEntity> usuariosJuridica = usuarioRepository.buscarPorTipoPessoa(JURIDICA);
 
-
         AnuncioPrestadorDTO anuncio = new AnuncioPrestadorDTO();
 
         Iterator<UsuarioEntity> iterator = usuariosJuridica.iterator();
@@ -149,17 +148,9 @@ public final class IdosoServiceImpl implements IdosoService {
 
         anuncios.forEach(a -> {
             HistoricoContratosDTO historico = null;
-            List<CandidaturaEntity> aceitas = a.getCandidaturas().stream().filter(c-> c.getStatus() == StatusCandidaturaEnum.ACEITA).collect(Collectors.toList());
-            String nomePrestador;
 
-            if(aceitas.isEmpty()) {
-                nomePrestador = "Não há prestadores para este anuncio";
-            } else {
-                int size = aceitas.size();
-                nomePrestador = aceitas.get(size -1).getPrestador().getNomeFantasia();
+            String nomePrestador = a.getNomePrestador();
 
-
-            }
             historico = HistoricoContratosDTO
                     .builder()
                     .fotoPrestador("Foto Prestador")
@@ -168,7 +159,7 @@ public final class IdosoServiceImpl implements IdosoService {
                     .horaFim(a.getHoraFim())
                     .valorHora(a.getPagamentoBase().doubleValue())
                     .dtFim(a.getDtFim())
-                    .nomePrestador(nomePrestador)
+                    .nomePrestador(Objects.isNull(nomePrestador) ? "Não há registro de prestador para este anuncio" : nomePrestador)
                     .avaliacao(a.getUsuario().getAvaliacao())
                     .build();
 

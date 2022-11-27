@@ -62,4 +62,6 @@ public final class AnuncioEntity {
     private LocalDate dtInicio;
 
     private LocalDate dtFim;
+
+    private String nomePrestador;
 }

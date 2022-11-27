@@ -19,4 +19,8 @@ public interface AnuncioRepository extends JpaRepository<AnuncioEntity, Long> {
     @Query("SELECT a FROM AnuncioEntity a WHERE a.dtFim < :today AND a.usuario = :parente")
     List<AnuncioEntity> anunciosVencidos(LocalDate today, UsuarioEntity parente);
 
+    @Modifying
+    @Query("UPDATE AnuncioEntity a SET a.nomePrestador = :nomePrestador WHERE a.id = :idAnuncio")
+    void addNomePrestador(String nomePrestador, Long idAnuncio);
+
 }

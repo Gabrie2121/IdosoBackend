@@ -1,11 +1,9 @@
 package com.idoso.backend.api.controller;
 
 import com.idoso.backend.api.domain.dto.response.*;
-import com.idoso.backend.api.domain.entities.CandidaturaEntity;
-import com.idoso.backend.api.domain.entities.EnderecoEntity;
-import com.idoso.backend.api.domain.entities.IdosoEntity;
-import com.idoso.backend.api.domain.entities.UsuarioEntity;
+import com.idoso.backend.api.domain.entities.*;
 import com.idoso.backend.api.domain.enuns.StatusCandidaturaEnum;
+import com.idoso.backend.api.domain.repository.AnuncioRepository;
 import com.idoso.backend.api.domain.repository.CandidaturaRepository;
 import com.idoso.backend.api.domain.repository.UsuarioRepository;
 import com.idoso.backend.api.domain.service.contracts.IdosoService;
@@ -36,6 +34,8 @@ public class UsuarioController {
     private final CandidaturaRepository candidaturaRepository;
 
     private final PasswordEncoder encoder;
+
+    private final AnuncioRepository anuncioRepository;
 
     @GetMapping("/all")
     public List<UsuarioEntity> getAll() {
@@ -146,14 +146,18 @@ public class UsuarioController {
         CandidaturaEntity candidatura = candidaturaRepository.findById(Long.parseLong(candidaturaId)).get();
         candidaturaRepository.updateCandidatura(StatusCandidaturaEnum.ACEITA, candidatura.getId());
 
-        List<CandidaturaEntity> candidaturasNaoAceitas = candidaturaRepository.candidaturasByAnuncio(candidatura.getAnuncio())
+        AnuncioEntity anuncio = candidatura.getAnuncio();
+
+        anuncioRepository.addNomePrestador(candidatura.getPrestador().getNomeFantasia(), anuncio.getId());
+
+        List<CandidaturaEntity> candidaturasNaoAceitas = candidaturaRepository.candidaturasByAnuncio(anuncio)
                 .stream()
                 .filter(c -> c.getId() != Long.parseLong(candidaturaId))
                 .peek(c -> c.setStatus(StatusCandidaturaEnum.NAO_ACEITA))
                 .collect(Collectors.toList());
         candidaturaRepository.saveAll(candidaturasNaoAceitas);
 
-        IdosoEntity idoso = candidatura.getAnuncio().getIdoso();
+        IdosoEntity idoso = anuncio.getIdoso();
         CandidaturaAceitaDTO retorno = CandidaturaAceitaDTO
                 .builder()
                 .candidaturaId(Long.parseLong(candidaturaId))
