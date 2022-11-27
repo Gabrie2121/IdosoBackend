@@ -141,7 +141,7 @@ public final class IdosoServiceImpl implements IdosoService {
 
     @Override
     public List<HistoricoContratosDTO> getListaContratosRealizados(Long usuarioId) {
-        UsuarioEntity parente = usuarioRepository.findById(usuarioId).orElseThrow(() -> throw new UsernameNotFoundException(("Usuário não encontrado")));
+        UsuarioEntity parente = usuarioRepository.findById(usuarioId).orElseThrow(() ->  new UsernameNotFoundException(("Usuário não encontrado")));
         List<HistoricoContratosDTO> contratosVencidos = new ArrayList<>();
 
         List<AnuncioEntity> anuncios = anuncioRepository.anunciosVencidos(LocalDate.now(), parente);
