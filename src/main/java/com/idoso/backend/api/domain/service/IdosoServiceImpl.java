@@ -44,24 +44,29 @@ public final class IdosoServiceImpl implements IdosoService {
 
         List<UsuarioEntity> usuariosJuridica = usuarioRepository.buscarPorTipoPessoa(JURIDICA);
 
-        AnuncioPrestadorDTO anuncio = new AnuncioPrestadorDTO();
 
-        Iterator<UsuarioEntity> iterator = usuariosJuridica.iterator();
-        while (iterator.hasNext()) {
-            UsuarioEntity next = iterator.next();
-            anuncio.setFoto(next.getFoto());
-            anuncio.setIdPrestador(next.getId());
-            anuncio.setFormado(next.getFormado());
-            anuncio.setNomePrestador(next.getNomeFantasia());
-            anuncio.setWhatsapp(next.getCelular());
-            anuncio.setValorHora(next.getValoHora());
-            anuncio.setCurso(next.getCurso());
-            anuncio.setAvaliacao(next.getAvaliacao());
+
+        usuariosJuridica.forEach(u -> {
+
+            AnuncioPrestadorDTO anuncio =
+                    AnuncioPrestadorDTO
+                            .builder()
+                            .foto(u.getFoto())
+                            .idPrestador(u.getId())
+                            .formado(u.getFormado())
+                            .nomePrestador(u.getNomeFantasia().equals("N/A") ? u.getNome() + " " + u.getSobrenome() : u.getNomeFantasia())
+                            .whatsapp(u.getCelular())
+                            .ValorHora(u.getValoHora())
+                            .curso(u.getCurso())
+                            .avaliacao(u.getAvaliacao())
+                            .build();
+
 
             anunciosPrestadorAberto.add(anuncio);
 
-        }
-        return HomeUsuarioDTO
+        });
+
+       return HomeUsuarioDTO
                 .builder()
                 .id(usuario.getId())
                 .nome(usuario.getNome())

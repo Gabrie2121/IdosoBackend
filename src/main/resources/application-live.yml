@@ -3,7 +3,7 @@ spring:
     database: POSTGRESQL
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
   datasource:
 
     url: jdbc:postgresql://82.180.160.174:5432/idosoprod
