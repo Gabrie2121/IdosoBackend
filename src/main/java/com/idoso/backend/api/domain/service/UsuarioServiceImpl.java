@@ -52,7 +52,7 @@ public final class UsuarioServiceImpl implements UsuarioService {
                 .builder()
                 .foto("Foto prestador")
                 .cidade(usuario.getEndereco().getCidade())
-                .nome(usuario.getNome() + " " + usuario.getSobrenome())
+                .nome(usuario.getRazaoSocial())
                 .avaliacao(usuario.getAvaliacao())
                 .biografia(usuario.getBiografia())
                 .build();
