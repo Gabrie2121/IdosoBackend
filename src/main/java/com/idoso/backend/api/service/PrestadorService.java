@@ -56,11 +56,16 @@ public class PrestadorService {
     }
 
     public List<HistoricoTrabalhosDTO> getHistoricoContratos(String usuarioId) {
+
         UsuarioEntity prestador = usuarioRepository.findById(Long.parseLong(usuarioId)).get();
 
         List<HistoricoTrabalhosDTO> listaTrabalhos = new ArrayList<>();
-
-        List<CandidaturaEntity> candidaturasVencidas = candidaturaRepository.candidaturasVencidas(LocalDate.now(), prestador);
+        List<CandidaturaEntity> candidaturasVencidas = new ArrayList<>();
+        try {
+            candidaturasVencidas = candidaturaRepository.candidaturasVencidas(LocalDate.now(), prestador);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
         candidaturasVencidas.forEach(c -> {
             UsuarioEntity parente = c.getAnuncio().getUsuario();

@@ -7,6 +7,7 @@ import com.idoso.backend.api.domain.enuns.StatusCandidaturaEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -29,7 +30,7 @@ public interface CandidaturaRepository extends JpaRepository<CandidaturaEntity, 
     List<CandidaturaEntity> candidaturasDoPrestador(UsuarioEntity prestador);
 
     @Query("SELECT c FROM CandidaturaEntity c WHERE c.anuncio.dtFim < :today AND c.prestador = :prestador")
-    List<CandidaturaEntity> candidaturasVencidas(LocalDate today, UsuarioEntity prestador);
+    List<CandidaturaEntity> candidaturasVencidas(@Param("today") LocalDate today,@Param("prestador") UsuarioEntity prestador);
 
 
 }

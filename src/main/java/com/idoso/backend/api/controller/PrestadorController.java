@@ -83,15 +83,16 @@ public class PrestadorController {
         return ResponseEntity.ok(homeData);
     }
 
-    @GetMapping("/getAceitas/{usuarioId}")
-    public ResponseEntity<?> getAceitas(@PathVariable String usuarioId){
-        List<AceitaPrestadorDTO> aceitas = prestadorService.getListaAceitas(Long.parseLong(usuarioId));
+    @GetMapping("/getAceitas/{idUsuario}")
+    public ResponseEntity<?> getAceitas(@PathVariable String idUsuario){
+        List<AceitaPrestadorDTO> aceitas = prestadorService.getListaAceitas(Long.parseLong(idUsuario));
 
         return ResponseEntity.ok(aceitas);
     }
 
-    @GetMapping("/historico/{usuarioId}")
-    public ResponseEntity<List<HistoricoTrabalhosDTO>> getHistoricoTrabalhos(@PathVariable String usuarioId) {
-        return ResponseEntity.ok(prestadorService.getHistoricoContratos(usuarioId));
+    @GetMapping("/historico/{idUsuario}")
+    public ResponseEntity<List<HistoricoTrabalhosDTO>> getHistoricoTrabalhos(@PathVariable String idUsuario) {
+        System.out.println(idUsuario);
+        return ResponseEntity.ok(prestadorService.getHistoricoContratos(idUsuario));
     }
 }
