@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class HistoricoTrabalhosDTO {
 
-    private Long id;
+    private String id;
 
     private String fotoIdoso;
 

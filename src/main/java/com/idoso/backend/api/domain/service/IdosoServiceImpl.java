@@ -162,7 +162,7 @@ public final class IdosoServiceImpl implements IdosoService {
 
             historico = HistoricoContratosDTO
                     .builder()
-                    .id(new Date().getTime())
+                    .id(UUID.randomUUID().toString())
                     .fotoPrestador("Foto Prestador")
                     .nomeIdoso(a.getIdoso().getNome() + " " + a.getIdoso().getSobrenome())
                     .horaInicio(a.getHoraInicio())

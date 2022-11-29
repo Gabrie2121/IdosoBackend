@@ -73,7 +73,7 @@ public class PrestadorService {
             UsuarioEntity parente = c.getAnuncio().getUsuario();
             HistoricoTrabalhosDTO trabalho = HistoricoTrabalhosDTO
                     .builder()
-                    .id(new Date().getTime())
+                    .id(UUID.randomUUID().toString())
                     .fotoIdoso("Foto do Idoso")
                     .avaliacao(parente.getAvaliacao())
                     .nomeParente(parente.getTipoPessoa() == TipoPessoaEnum.FISICA ? parente.getNome() + " " + parente.getSobrenome() : parente.getNomeFantasia())
