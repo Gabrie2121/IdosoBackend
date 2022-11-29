@@ -1,6 +1,7 @@
 package com.idoso.backend.api.handlers;
 
 import com.idoso.backend.api.domain.dto.response.ResponseError;
+import com.idoso.backend.api.domain.exception.CandidaturaNaoEncontradaException;
 import com.idoso.backend.api.domain.exception.ObjectNotFoundException;
 import com.idoso.backend.api.domain.exception.DocumentoNaoEncontradoException;
 import com.idoso.backend.api.domain.exception.UsuarioExistenteException;
@@ -54,6 +55,17 @@ public class ControllerExceptionHandler {
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseError handleUsertNotFoundException(DocumentoNaoEncontradoException exception) {
+        return ResponseError
+                .newBuilder()
+                .errorCode("400")
+                .message(exception.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(CandidaturaNaoEncontradaException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseError handleCandidaturaNaoEncontrada(CandidaturaNaoEncontradaException exception) {
         return ResponseError
                 .newBuilder()
                 .errorCode("400")

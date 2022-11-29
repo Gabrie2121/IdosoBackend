@@ -3,6 +3,7 @@ package com.idoso.backend.api.controller;
 import com.idoso.backend.api.domain.dto.response.*;
 import com.idoso.backend.api.domain.entities.*;
 import com.idoso.backend.api.domain.enuns.StatusCandidaturaEnum;
+import com.idoso.backend.api.domain.exception.CandidaturaNaoEncontradaException;
 import com.idoso.backend.api.domain.repository.AnuncioRepository;
 import com.idoso.backend.api.domain.repository.CandidaturaRepository;
 import com.idoso.backend.api.domain.repository.UsuarioRepository;
@@ -15,10 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -141,10 +139,19 @@ public class UsuarioController {
     }
 
 
-    @PatchMapping("/candidaturas/aceitar/{candidaturaId}")
+    @PatchMapping("/candidaturas/aceitar/{prestadorId}")
     @Transactional
-    public ResponseEntity<?> aceitarCandidatura(@PathVariable String candidaturaId) {
-        CandidaturaEntity candidatura = candidaturaRepository.findById(Long.parseLong(candidaturaId)).get();
+    public ResponseEntity<?> aceitarCandidatura(@PathVariable String prestadorId) {
+
+        UsuarioEntity prestador = usuarioRepository.findById(Long.parseLong(prestadorId))
+                .orElseThrow(() -> new UsernameNotFoundException("Prestador Nao Encontradp"));
+
+        CandidaturaEntity candidatura = candidaturaRepository.candidaturasByUser(prestador).get(0);
+
+        if(Objects.isNull(candidatura)) {
+            throw new CandidaturaNaoEncontradaException("Candidatura não encontrada para este usuário");
+        }
+
         candidaturaRepository.updateCandidatura(StatusCandidaturaEnum.ACEITA, candidatura.getId());
 
         AnuncioEntity anuncio = candidatura.getAnuncio();
@@ -153,7 +160,7 @@ public class UsuarioController {
 
         List<CandidaturaEntity> candidaturasNaoAceitas = candidaturaRepository.candidaturasByAnuncio(anuncio)
                 .stream()
-                .filter(c -> c.getId() != Long.parseLong(candidaturaId))
+                .filter(c -> c.getId() != candidatura.getId())
                 .peek(c -> c.setStatus(StatusCandidaturaEnum.NAO_ACEITA))
                 .collect(Collectors.toList());
         candidaturaRepository.saveAll(candidaturasNaoAceitas);
@@ -162,7 +169,7 @@ public class UsuarioController {
         CandidaturaAceitaDTO retorno = CandidaturaAceitaDTO
                 .builder()
                 .anuncioId(anuncio.getId())
-                .candidaturaId(Long.parseLong(candidaturaId))
+                .candidaturaId(candidatura.getId())
                 .status(StatusCandidaturaEnum.ACEITA)
                 .prestadorId(candidatura.getPrestador().getId())
                 .nomeIdoso(idoso.getNome() + " " + idoso.getSobrenome())
