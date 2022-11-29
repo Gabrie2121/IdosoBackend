@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -71,6 +73,7 @@ public class PrestadorService {
             UsuarioEntity parente = c.getAnuncio().getUsuario();
             HistoricoTrabalhosDTO trabalho = HistoricoTrabalhosDTO
                     .builder()
+                    .id(new Date().getTime())
                     .fotoIdoso("Foto do Idoso")
                     .avaliacao(parente.getAvaliacao())
                     .nomeParente(parente.getTipoPessoa() == TipoPessoaEnum.FISICA ? parente.getNome() + " " + parente.getSobrenome() : parente.getNomeFantasia())

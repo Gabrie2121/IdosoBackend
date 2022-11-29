@@ -13,6 +13,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class HistoricoTrabalhosDTO {
 
+    private Long id;
+
     private String fotoIdoso;
 
     private Double avaliacao;

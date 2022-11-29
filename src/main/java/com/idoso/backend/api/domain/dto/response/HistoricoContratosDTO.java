@@ -13,6 +13,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class HistoricoContratosDTO {
 
+    private Long id;
+
     private String fotoPrestador;
 
     private String nomePrestador;
