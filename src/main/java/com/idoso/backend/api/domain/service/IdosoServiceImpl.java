@@ -96,7 +96,7 @@ public final class IdosoServiceImpl implements IdosoService {
                     .cidade(prestador.getEndereco().getCidade())
                     .curso(prestador.getCurso())
                     .formado(prestador.getFormado())
-                    .nome(prestador.getNome().concat(" ".concat(prestador.getSobrenome())))
+                    .nome(prestador.getNomeFantasia())
                     .avaliacao(prestador.getAvaliacao())
                     .biografia(prestador.getBiografia())
                     .build();
@@ -132,7 +132,7 @@ public final class IdosoServiceImpl implements IdosoService {
                             .cidade(prestador.getEndereco().getCidade())
                             .curso(prestador.getCurso())
                             .formado(prestador.getFormado())
-                            .nome(prestador.getNome().concat(" ".concat(prestador.getSobrenome())))
+                            .nome(prestador.getNomeFantasia())
                             .avaliacao(prestador.getAvaliacao())
                             .biografia(prestador.getBiografia())
                             .build();

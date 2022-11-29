@@ -127,7 +127,7 @@ public class UsuarioController {
                             .curso(prestador.getCurso())
                             .whatsapp(prestador.getCelular())
                             .avaliacao(prestador.getAvaliacao())
-                            .nomePrestador(prestador.getNome())
+                            .nomePrestador(prestador.getNomeFantasia())
                             .laudos(Arrays.asList("laudo 1", "laudo 2"))
                             .fotoPrestador("Foto prestador")
                             .formado(prestador.getFormado())
