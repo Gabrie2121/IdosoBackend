@@ -45,8 +45,10 @@ public final class IdosoServiceImpl implements IdosoService {
 
         usuariosJuridica.forEach(u -> {
             Long idPrestador = u.getId();
-            List<AnuncioEntity> anunciosOoPrestador = anuncioRepository.findByUsuarioId(idPrestador);
+
+            List<AnuncioEntity> anunciosOoPrestador = anuncioRepository.findByUsuarioId(id);
             anunciosOoPrestador.forEach(a -> {
+
                 AnuncioPrestadorDTO anuncio =
                         AnuncioPrestadorDTO
                                 .builder()
@@ -61,10 +63,9 @@ public final class IdosoServiceImpl implements IdosoService {
                                 .avaliacao(u.getAvaliacao())
                                 .build();
 
-
                 anunciosPrestadorAberto.add(anuncio);
-
             });
+
         });
 
         return HomeUsuarioDTO
