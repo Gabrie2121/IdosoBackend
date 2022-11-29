@@ -131,6 +131,7 @@ public class UsuarioController {
                             .laudos(Arrays.asList("laudo 1", "laudo 2"))
                             .fotoPrestador("Foto prestador")
                             .formado(prestador.getFormado())
+                            .valorHora(c.getAnuncio().getPagamentoBase().doubleValue())
                             .foto("Foto parente")
                             .nomeIdoso(idoso.getNome() + " " + idoso.getSobrenome())
                     .build());
