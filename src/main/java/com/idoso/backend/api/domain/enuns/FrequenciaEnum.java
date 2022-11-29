@@ -1,5 +1,5 @@
 package com.idoso.backend.api.domain.enuns;
 
 public enum FrequenciaEnum {
-    UMDIA, DOISDIAS, DIASIMNAO, SEGUNDASEXTA, FINALSEMANA, TODOSDIAS;
+    UMDIA, DOISDIAS, DIASIMNAO, SEGUNDASEXTA, FINALSEMANA, TODOSDIAS, ALTERNADO;
 }
