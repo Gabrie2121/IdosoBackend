@@ -68,6 +68,10 @@ public class CadastroController {
 
         setProfiles(usuario);
 
+        if(usuario.getTipoPessoa() == TipoPessoaEnum.JURIDICA) {
+            usuario.setValoHora(250.00);
+        }
+
          return usuarioRepository.save(usuario);
 
     }
