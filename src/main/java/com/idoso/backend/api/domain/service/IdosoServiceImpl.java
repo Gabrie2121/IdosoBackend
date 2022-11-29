@@ -9,6 +9,7 @@ import com.idoso.backend.api.domain.entities.AnuncioEntity;
 import com.idoso.backend.api.domain.entities.CandidaturaEntity;
 import com.idoso.backend.api.domain.entities.UsuarioEntity;
 import com.idoso.backend.api.domain.enuns.StatusCandidaturaEnum;
+import com.idoso.backend.api.domain.exception.CandidaturaNaoEncontradaException;
 import com.idoso.backend.api.domain.repository.AnuncioRepository;
 import com.idoso.backend.api.domain.repository.CandidaturaRepository;
 import com.idoso.backend.api.domain.repository.UsuarioRepository;
@@ -77,10 +78,14 @@ public final class IdosoServiceImpl implements IdosoService {
     }
 
     @Override
-    public List<CandidatoDTO> getListaCandidatos(Long idAnuncio) {
-        AnuncioEntity anuncio = anuncioRepository.findById(idAnuncio).get();
+    public List<CandidatoDTO> getListaCandidatos(Long idUsuario) {
+        AnuncioEntity anuncio = anuncioRepository.findByUsuarioId(idUsuario).get(0);
 
         List<CandidaturaEntity> candidaturas = candidaturaRepository.candidaturasByAnuncio(anuncio);
+
+        if(candidaturas.isEmpty()) {
+            throw new CandidaturaNaoEncontradaException("Não existem candidaturas pra esse usuário");
+        }
 
         List<CandidatoDTO> dtos = new ArrayList<>();
 

@@ -178,9 +178,9 @@ public class UsuarioController {
         return ResponseEntity.ok(retorno);
     }
 
-    @GetMapping("/getCandidatos/{anuncioId}")
-    public ResponseEntity<?> getCandidatos(@PathVariable String anuncioId){
-        List<CandidatoDTO> candidatos = idosoService.getListaCandidatos(Long.parseLong(anuncioId));
+    @GetMapping("/getCandidatos/{idUsuario}")
+    public ResponseEntity<?> getCandidatos(@PathVariable String idUsuario){
+        List<CandidatoDTO> candidatos = idosoService.getListaCandidatos(Long.parseLong(idUsuario));
         return ResponseEntity.ok(candidatos);
     }
 
