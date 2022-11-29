@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CandidaturaAceitaDTO {
 
+    private Long anuncioId;
     private Long candidaturaId;
     private Long prestadorId;
     private String nomeIdoso;

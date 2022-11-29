@@ -34,7 +34,6 @@ public class PrestadorController {
     public ResponseEntity<List<AnuncioCriadoDTO>> getAllAnunciosForHome() {
         List<AnuncioCriadoDTO> retorno = new ArrayList<>();
         anuncioRepository.findAll().forEach(a -> {
-
             String nome = a.getIdoso().getNome();
 
             AnuncioCriadoDTO dto =

@@ -19,7 +19,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,29 +43,31 @@ public final class IdosoServiceImpl implements IdosoService {
 
         List<UsuarioEntity> usuariosJuridica = usuarioRepository.buscarPorTipoPessoa(JURIDICA);
 
-
-
         usuariosJuridica.forEach(u -> {
+            Long idPrestador = u.getId();
+            List<AnuncioEntity> anunciosOoPrestador = anuncioRepository.findByUsuarioId(idPrestador);
+            anunciosOoPrestador.forEach(a -> {
+                AnuncioPrestadorDTO anuncio =
+                        AnuncioPrestadorDTO
+                                .builder()
+                                .anuncioId(a.getId())
+                                .foto(u.getFoto())
+                                .idPrestador(u.getId())
+                                .formado(u.getFormado())
+                                .nomePrestador(u.getNomeFantasia().equals("N/A") ? u.getNome() + " " + u.getSobrenome() : u.getNomeFantasia())
+                                .whatsapp(u.getCelular())
+                                .ValorHora(u.getValoHora())
+                                .curso(u.getCurso())
+                                .avaliacao(u.getAvaliacao())
+                                .build();
 
-            AnuncioPrestadorDTO anuncio =
-                    AnuncioPrestadorDTO
-                            .builder()
-                            .foto(u.getFoto())
-                            .idPrestador(u.getId())
-                            .formado(u.getFormado())
-                            .nomePrestador(u.getNomeFantasia().equals("N/A") ? u.getNome() + " " + u.getSobrenome() : u.getNomeFantasia())
-                            .whatsapp(u.getCelular())
-                            .ValorHora(u.getValoHora())
-                            .curso(u.getCurso())
-                            .avaliacao(u.getAvaliacao())
-                            .build();
 
+                anunciosPrestadorAberto.add(anuncio);
 
-            anunciosPrestadorAberto.add(anuncio);
-
+            });
         });
 
-       return HomeUsuarioDTO
+        return HomeUsuarioDTO
                 .builder()
                 .id(usuario.getId())
                 .nome(usuario.getNome())
@@ -145,7 +146,7 @@ public final class IdosoServiceImpl implements IdosoService {
 
     @Override
     public List<HistoricoContratosDTO> getListaContratosRealizados(Long usuarioId) {
-        UsuarioEntity parente = usuarioRepository.findById(usuarioId).orElseThrow(() ->  new UsernameNotFoundException(("Usuário não encontrado")));
+        UsuarioEntity parente = usuarioRepository.findById(usuarioId).orElseThrow(() -> new UsernameNotFoundException(("Usuário não encontrado")));
         List<HistoricoContratosDTO> contratosVencidos = new ArrayList<>();
 
         List<AnuncioEntity> anuncios = anuncioRepository.anunciosVencidos(LocalDate.now(), parente);

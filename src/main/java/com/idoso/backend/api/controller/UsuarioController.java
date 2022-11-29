@@ -161,6 +161,7 @@ public class UsuarioController {
         IdosoEntity idoso = anuncio.getIdoso();
         CandidaturaAceitaDTO retorno = CandidaturaAceitaDTO
                 .builder()
+                .anuncioId(anuncio.getId())
                 .candidaturaId(Long.parseLong(candidaturaId))
                 .status(StatusCandidaturaEnum.ACEITA)
                 .prestadorId(candidatura.getPrestador().getId())
