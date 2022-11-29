@@ -46,26 +46,23 @@ public final class IdosoServiceImpl implements IdosoService {
         usuariosJuridica.forEach(u -> {
             Long idPrestador = u.getId();
 
-            List<AnuncioEntity> anunciosOoPrestador = anuncioRepository.findByUsuarioId(id);
-            anunciosOoPrestador.forEach(a -> {
+            List<AnuncioEntity> anunciosDoUsuario = anuncioRepository.findByUsuarioId(id);
 
-                AnuncioPrestadorDTO anuncio =
-                        AnuncioPrestadorDTO
-                                .builder()
-                                .anuncioId(a.getId())
-                                .foto(u.getFoto())
-                                .idPrestador(u.getId())
-                                .formado(u.getFormado())
-                                .nomePrestador(u.getNomeFantasia().equals("N/A") ? u.getNome() + " " + u.getSobrenome() : u.getNomeFantasia())
-                                .whatsapp(u.getCelular())
-                                .ValorHora(u.getValoHora())
-                                .curso(u.getCurso())
-                                .avaliacao(u.getAvaliacao())
-                                .build();
 
-                anunciosPrestadorAberto.add(anuncio);
-            });
+            AnuncioPrestadorDTO anuncio =
+                    AnuncioPrestadorDTO
+                            .builder()
+                            .foto(u.getFoto())
+                            .idPrestador(u.getId())
+                            .formado(u.getFormado())
+                            .nomePrestador(u.getNomeFantasia().equals("N/A") ? u.getNome() + " " + u.getSobrenome() : u.getNomeFantasia())
+                            .whatsapp(u.getCelular())
+                            .ValorHora(u.getValoHora())
+                            .curso(u.getCurso())
+                            .avaliacao(u.getAvaliacao())
+                            .build();
 
+            anunciosPrestadorAberto.add(anuncio);
         });
 
         return HomeUsuarioDTO

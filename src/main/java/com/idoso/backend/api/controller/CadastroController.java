@@ -68,21 +68,7 @@ public class CadastroController {
 
         setProfiles(usuario);
 
-//        if(usuario.getTipoPessoa() == TipoPessoaEnum.JURIDICA) {
-//            String separador = getSeparator();
-//            final int[] count = {1};
-//
-//            usuario.getCertificados().forEach(c -> {
-//                String path = profileFolder + separador + usuario.getNDoc() + " certificado " +
-//                        String.format("%04d", count[0])+".pdf";
-//                count[0]++;
-//                fileService.converteBytesParaArquivo(path, c);
-//            });
-//        }
-
-
-
-        return usuarioRepository.save(usuario);
+         return usuarioRepository.save(usuario);
 
     }
 
